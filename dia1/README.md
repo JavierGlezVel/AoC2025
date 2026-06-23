@@ -6,8 +6,8 @@ El problema plantea una caja fuerte con un dial circular numerado del `0` al `99
 El dial empieza en la posición `50` y recibe una lista de rotaciones, una por línea.
 Cada rotación empieza por:
 
-- `L`: giro hacia la izquierda, hacia números menores.
-- `R`: giro hacia la derecha, hacia números mayores.
+- `L`: giro hacia la izquierda, números menores.
+- `R`: giro hacia la derecha, números mayores.
 
 Después aparece el número de clicks que debe avanzar el dial. Como el dial es
 circular, al girar a la izquierda desde `0` se pasa a `99`, y al girar a la derecha
