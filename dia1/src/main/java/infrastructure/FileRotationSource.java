@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class FileRotationSource implements RotationSource {
-    private String path;
+    private final String path;
 
     public FileRotationSource(String path) {
         this.path = path;
