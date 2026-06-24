@@ -15,6 +15,7 @@
         <module>dia3</module>
         <module>dia4</module>
         <module>dia5</module>
+        <module>dia6</module>
     </modules>
 
     <properties>
