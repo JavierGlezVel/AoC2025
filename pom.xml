@@ -13,6 +13,8 @@
         <module>dia1</module>
         <module>dia2</module>
         <module>dia3</module>
+        <module>dia4</module>
+        <module>dia5</module>
     </modules>
 
     <properties>

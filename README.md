@@ -37,6 +37,15 @@ AOC/
         part2/
       infrastructure/
     src/main/resources/input.txt
+  dia4/
+    pom.xml
+    src/main/java/
+      application/
+      domain/
+        common/
+        part1/
+      infrastructure/
+    src/main/resources/input.txt
 ```
 
 Cada dia es un modulo Maven independiente. Dentro de cada dia, `application` coordina
