@@ -1,21 +1,21 @@
-# Dia 8
+# Día 8
 
 ## Problema
 
-El problema ocurre en un parque subterraneo. La entrada contiene posiciones de cajas
-de conexion en un espacio tridimensional. Cada linea tiene coordenadas `X,Y,Z`:
+El problema ocurre en un parque subterráneo. La entrada contiene posiciones de cajas
+de conexión en un espacio tridimensional. Cada línea tiene coordenadas `X,Y,Z`:
 
 ```text
 162,817,812
 57,618,57
 ```
 
-Los elfos conectan parejas de cajas empezando por las que estan mas cerca en
+Los elfos conectan parejas de cajas empezando por las que están más cerca en
 distancia recta. Cuando dos cajas se conectan, sus circuitos se unen. Si las dos cajas
-ya estaban en el mismo circuito, esa conexion no cambia la red, pero sigue formando
-parte de la lista de conexiones mas cortas procesadas.
+ya estaban en el mismo circuito, esa conexión no cambia la red, pero sigue formando
+parte de la lista de conexiones más cortas procesadas.
 
-La entrada esta en:
+La entrada está en:
 
 ```text
 src/main/resources/input.txt
@@ -23,11 +23,11 @@ src/main/resources/input.txt
 
 ## Parte 1
 
-El objetivo es procesar las 1000 parejas de cajas mas cercanas y multiplicar los
-tamanos de los tres circuitos mas grandes que queden despues.
+El objetivo es procesar las 1000 parejas de cajas más cercanas y multiplicar los
+tamaños de los tres circuitos más grandes que queden después.
 
-Con el ejemplo oficial, tras procesar las 10 conexiones mas cortas, los tres mayores
-circuitos tienen tamanos `5`, `4` y `2`. El resultado es:
+Con el ejemplo oficial, tras procesar las 10 conexiones más cortas, los tres mayores
+circuitos tienen tamaños `5`, `4` y `2`. El resultado es:
 
 ```text
 40
@@ -42,11 +42,11 @@ Con el input del proyecto, la respuesta de la parte 1 es:
 ## Parte 2
 
 Ahora hay que seguir conectando parejas, siempre en orden de cercania, hasta que
-todas las cajas queden dentro de un unico circuito. El resultado pedido es el
-producto de las coordenadas `X` de las dos cajas de la conexion que consigue unirlo
+todas las cajas queden dentro de un único circuito. El resultado pedido es el
+producto de las coordenadas `X` de las dos cajas de la conexión que consigue unirlo
 todo.
 
-Con el ejemplo oficial, la conexion final es entre `216,146,977` y `117,168,530`, y
+Con el ejemplo oficial, la conexión final es entre `216,146,977` y `117,168,530`, y
 el resultado es:
 
 ```text
@@ -59,7 +59,7 @@ Con el input del proyecto, la respuesta de la parte 2 es:
 8361881885
 ```
 
-## Enfoque de la solucion
+## Enfoque de la solución
 
 `ConnectionCandidateGenerator` genera todas las parejas posibles de cajas y calcula
 su distancia al cuadrado:
@@ -68,25 +68,25 @@ su distancia al cuadrado:
 long distanceSquared = junctionBoxes.get(first).distanceSquaredTo(junctionBoxes.get(second));
 ```
 
-No hace falta calcular la raiz cuadrada porque comparar distancias al cuadrado
-mantiene el mismo orden y evita trabajar con numeros decimales.
+No hace falta calcular la raíz cuadrada porque comparar distancias al cuadrado
+mantiene el mismo orden y evita trabajar con números decimales.
 
-Despues ordena las parejas por distancia. Las dos partes reutilizan esa lista
+Después ordena las parejas por distancia. Las dos partes reutilizan esa lista
 ordenada, pero aplican reglas distintas:
 
 - `CircuitSizeProductCalculatorPart1` procesa las primeras 1000 conexiones y
-  multiplica los tres tamanos de circuito mas grandes.
+  multiplica los tres tamaños de circuito más grandes.
 - `FinalConnectionXProductCalculatorPart2` procesa conexiones hasta que
-  `CircuitNetwork` queda reducido a un unico circuito y devuelve el producto de las
-  coordenadas `X` de esa ultima conexion necesaria.
+  `CircuitNetwork` queda reducido a un único circuito y devuelve el producto de las
+  coordenadas `X` de esa última conexión necesaria.
 
-`CircuitNetwork` implementa union-busqueda. Esta estructura mantiene para cada caja
-su representante de circuito, el tamano de cada componente conectada y cuantos
+`CircuitNetwork` implementa unión-búsqueda. Esta estructura mantiene para cada caja
+su representante de circuito, el tamaño de cada componente conectada y cuántos
 circuitos quedan activos.
 
-## Diseno de clases
+## Diseño de clases
 
-La solucion esta dividida en tres paquetes principales:
+La solución está dividida en tres paquetes principales:
 
 ```text
 application/
@@ -101,71 +101,71 @@ infrastructure/
 
 Contiene conceptos compartidos del problema.
 
-- `JunctionBox`: representa una caja de conexion y calcula distancias al cuadrado.
-- `ConnectionCandidate`: representa una posible conexion entre dos cajas.
+- `JunctionBox`: representa una caja de conexión y calcula distancias al cuadrado.
+- `ConnectionCandidate`: representa una posible conexión entre dos cajas.
 - `ConnectionCandidateGenerator`: genera las posibles conexiones ordenadas por
   distancia.
-- `CircuitNetwork`: representa la red de circuitos mediante union-busqueda.
+- `CircuitNetwork`: representa la red de circuitos mediante unión-búsqueda.
 
 ### `domain/part1`
 
-Contiene la regla especifica de la primera parte.
+Contiene la regla específica de la primera parte.
 
-- `CircuitSizeProductCalculatorPart1`: procesa las conexiones mas cortas y calcula
+- `CircuitSizeProductCalculatorPart1`: procesa las conexiones más cortas y calcula
   el producto pedido.
 
 ### `domain/part2`
 
-Contiene la regla especifica de la segunda parte.
+Contiene la regla específica de la segunda parte.
 
-- `FinalConnectionXProductCalculatorPart2`: conecta cajas hasta que queda un unico
-  circuito y calcula el producto de las `X` de la conexion final.
+- `FinalConnectionXProductCalculatorPart2`: conecta cajas hasta que queda un único
+  circuito y calcula el producto de las `X` de la conexión final.
 
 ### `application`
 
 Coordina el caso de uso.
 
-- `JunctionBoxParser`: transforma las lineas del fichero en cajas del dominio.
-- `PlaygroundSolver`: lee la entrada, la parsea y delega el calculo.
+- `JunctionBoxParser`: transforma las líneas del fichero en cajas del dominio.
+- `PlaygroundSolver`: lee la entrada, la parsea y delega el cálculo.
 
 ### `infrastructure`
 
 Contiene los detalles externos al dominio.
 
-- `JunctionBoxSource`: interfaz para obtener las lineas de entrada.
-- `FileJunctionBoxSource`: implementacion que lee las cajas desde un fichero.
+- `JunctionBoxSource`: interfaz para obtener las líneas de entrada.
+- `FileJunctionBoxSource`: implementación que lee las cajas desde un fichero.
 
 ## Principios aplicados
 
-### Abstraccion
+### Abstracción
 
-El dominio trabaja con conceptos propios del problema: caja de conexion, red de
-circuitos, conexiones candidatas y calculos de cada parte. La logica no depende de
+El dominio trabaja con conceptos propios del problema: caja de conexión, red de
+circuitos, conexiones candidatas y cálculos de cada parte. La lógica no depende de
 rutas de ficheros ni de consola.
 
-### Diseno por contrato
+### Diseño por contrato
 
-`JunctionBoxParser` rechaza entradas vacias, lineas nulas, lineas sin tres
-coordenadas y coordenadas que no sean numericas. `CircuitNetwork` exige al menos un
+`JunctionBoxParser` rechaza entradas vacías, líneas nulas, líneas sin tres
+coordenadas y coordenadas que no sean numéricas. `CircuitNetwork` exige al menos un
 elemento, `CircuitSizeProductCalculatorPart1` exige al menos tres cajas y
 `FinalConnectionXProductCalculatorPart2` exige al menos dos cajas.
 
-### Alta cohesion y SRP
+### Alta cohesión y SRP
 
 Cada clase tiene una responsabilidad concreta:
 
 - `JunctionBoxParser` solo parsea coordenadas.
-- `JunctionBox` solo representa una posicion 3D y calcula distancias.
+- `JunctionBox` solo representa una posición 3D y calcula distancias.
 - `ConnectionCandidateGenerator` solo genera conexiones candidatas ordenadas.
 - `CircuitNetwork` solo gestiona componentes conectadas.
 - `CircuitSizeProductCalculatorPart1` solo aplica la regla de la parte 1.
 - `FinalConnectionXProductCalculatorPart2` solo aplica la regla de la parte 2.
-- `FileJunctionBoxSource` solo lee lineas de un fichero.
+- `FileJunctionBoxSource` solo lee líneas de un fichero.
 - `PlaygroundSolver` solo coordina el caso de uso.
 - `Main` solo prepara dependencias y muestra la salida.
 
-Esto sigue la idea de cohesion y responsabilidad unica vista en teoria: cada modulo
-tiene una razon principal para cambiar.
+Esto sigue la idea de cohesión y responsabilidad única vista en teoría: cada módulo
+tiene una razón principal para cambiar.
 
 ### Bajo acoplamiento
 
@@ -177,29 +177,29 @@ public PlaygroundSolver(JunctionBoxSource source) {
 }
 ```
 
-Esto permite cambiar el origen de datos sin modificar la logica de aplicacion.
+Esto permite cambiar el origen de datos sin modificar la lógica de aplicación.
 
-### Inversion e inyeccion de dependencias
+### Inversión e inyección de dependencias
 
-La logica de alto nivel depende de una abstraccion (`JunctionBoxSource`). La
-implementacion concreta se crea fuera y se inyecta por constructor:
+La lógica de alto nivel depende de una abstracción (`JunctionBoxSource`). La
+implementación concreta se crea fuera y se inyecta por constructor:
 
 ```java
 JunctionBoxSource source = new FileJunctionBoxSource(inputPath);
 PlaygroundSolver solver = new PlaygroundSolver(source);
 ```
 
-Asi se separa la creacion del objeto concreto de su uso, reduciendo acoplamiento.
+Así se separa la creación del objeto concreto de su uso, reduciendo acoplamiento.
 
 ### Modularidad
 
-La division en paquetes separa responsabilidades:
+La división en paquetes separa responsabilidades:
 
 - `domain/common`: conceptos compartidos del problema.
-- `domain/part1`: regla especifica de la primera parte.
-- `domain/part2`: regla especifica de la segunda parte.
-- `application`: coordinacion del caso de uso.
-- `infrastructure`: detalles tecnicos de entrada.
+- `domain/part1`: regla específica de la primera parte.
+- `domain/part2`: regla específica de la segunda parte.
+- `application`: coordinación del caso de uso.
+- `infrastructure`: detalles técnicos de entrada.
 
 ### Abierto/cerrado
 
@@ -208,7 +208,7 @@ reutilizando `JunctionBox`, `CircuitNetwork` y `ConnectionCandidateGenerator`. E
 mantiene las clases del dominio comun abiertas a reutilizacion por nuevas reglas y
 cerradas frente a cambios innecesarios cuando aparece una nueva parte del problema.
 
-## Patrones y tecnicas usadas
+## Patrones y técnicas usadas
 
 ### Source / Adapter
 
@@ -223,17 +223,17 @@ definido por sus coordenadas.
 ### Service
 
 `CircuitSizeProductCalculatorPart1` y `FinalConnectionXProductCalculatorPart2`
-actuan como servicios de dominio: no representan entidades con identidad propia,
+actúan como servicios de dominio: no representan entidades con identidad propia,
 sino operaciones que calculan los resultados de cada parte.
 
-### Union-busqueda
+### Unión-búsqueda
 
-`CircuitNetwork` usa union-busqueda con compresion de caminos y union por tamano.
+`CircuitNetwork` usa unión-búsqueda con compresión de caminos y unión por tamaño.
 Esto permite unir circuitos y consultar componentes de forma eficiente.
 
 ## Tests
 
-Los tests estan en:
+Los tests están en:
 
 ```text
 src/test/java/
@@ -241,23 +241,23 @@ src/test/java/
 
 Cubren:
 
-- el parseo de coordenadas validas;
-- el rechazo de lineas invalidas;
+- el parseo de coordenadas válidas;
+- el rechazo de líneas inválidas;
 - el ejemplo oficial de la parte 1, cuyo resultado esperado es `40`;
-- que una pareja ya conectada siga contando como conexion procesada.
+- que una pareja ya conectada siga contando como conexión procesada.
 - el ejemplo oficial de la parte 2, cuyo resultado esperado es `25272`;
-- que la parte 2 ignore conexiones internas al mismo circuito y pare en la union
-  real que deja un unico circuito.
+- que la parte 2 ignore conexiones internas al mismo circuito y pare en la unión
+  real que deja un único circuito.
 
-Para ejecutar los tests desde la raiz del repositorio:
+Para ejecutar los tests desde la raíz del repositorio:
 
 ```bash
 mvn -pl dia8 test
 ```
 
-## Ejecucion
+## Ejecución
 
-Desde la raiz del repositorio:
+Desde la raíz del repositorio:
 
 ```bash
 mvn -pl dia8 exec:java -Dexec.mainClass=Main

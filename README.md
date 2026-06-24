@@ -1,6 +1,6 @@
 # Advent of Code
 
-Repositorio para resolver Advent of Code en Java, organizado como un proyecto Maven multimodulo.
+Repositorio para resolver Advent of Code en Java, organizado como un proyecto Maven multimódulo.
 
 ## Estructura
 
@@ -58,19 +58,19 @@ AOC/
     src/main/resources/input.txt
 ```
 
-Cada dia es un modulo Maven independiente. Dentro de cada dia, `application` coordina
+Cada día es un módulo Maven independiente. Dentro de cada día, `application` coordina
 el caso de uso, `infrastructure` contiene la entrada/salida, y `domain` se divide en
-`common`, `part1` y `part2` para distinguir lo compartido de lo especifico de cada
+`common`, `part1` y `part2` para distinguir lo compartido de lo específico de cada
 parte.
 
-El `pom.xml` de la raiz permite compilar todos los dias juntos.
+El `pom.xml` de la raíz permite compilar todos los días juntos.
 
 ## Comandos
 
-Desde la raiz del repositorio:
+Desde la raíz del repositorio:
 
 ```bash
 mvn compile
 ```
 
-Para ejecutar un dia desde IntelliJ, abre el repositorio desde la carpeta `AOC` e importa el proyecto Maven.
+Para ejecutar un día desde IntelliJ, abre el repositorio desde la carpeta `AOC` e importa el proyecto Maven.

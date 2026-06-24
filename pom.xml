@@ -19,6 +19,7 @@
         <module>dia7</module>
         <module>dia8</module>
         <module>dia9</module>
+        <module>dia10</module>
     </modules>
 
     <properties>
