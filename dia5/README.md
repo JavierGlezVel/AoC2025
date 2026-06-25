@@ -279,7 +279,9 @@ Contiene los detalles externos al dominio.
 classDiagram
     class Main
     class CafeteriaSolver {
-        +solvePart1() long
+        -source DatabaseSource
+        -parser InventoryDatabaseParser
+        +solvePart1() int
         +solvePart2() long
     }
     class InventoryDatabaseParser {
@@ -290,12 +292,31 @@ classDiagram
         +getLines() List~String~
     }
     class FileDatabaseSource {
+        -path String
         +getLines() List~String~
     }
-    class InventoryDatabase
-    class FreshIngredientIdRange
-    class FreshIngredientCounterPart1
-    class FreshIngredientIdCoverageCounterPart2
+    class InventoryDatabase {
+        +freshRanges List~FreshIngredientIdRange~
+        +availableIngredientIds List~Long~
+        +freshRanges() List~FreshIngredientIdRange~
+        +availableIngredientIds() List~Long~
+    }
+    class FreshIngredientIdRange {
+        +firstId long
+        +lastId long
+        +firstId() long
+        +lastId() long
+        +contains(long) boolean
+        +overlapsOrTouches(FreshIngredientIdRange) boolean
+        +merge(FreshIngredientIdRange) FreshIngredientIdRange
+        +size() long
+    }
+    class FreshIngredientCounterPart1 {
+        +count(InventoryDatabase) int
+    }
+    class FreshIngredientIdCoverageCounterPart2 {
+        +count(InventoryDatabase) long
+    }
 
     Main --> CafeteriaSolver
     Main --> FileDatabaseSource

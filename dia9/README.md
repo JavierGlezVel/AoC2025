@@ -313,6 +313,8 @@ Contiene los detalles externos al dominio.
 classDiagram
     class Main
     class MovieTheaterSolver {
+        -source RedTileSource
+        -parser RedTileParser
         +solvePart1() long
         +solvePart2() long
     }
@@ -324,14 +326,41 @@ classDiagram
         +getLines() List~String~
     }
     class FileRedTileSource {
+        -path String
         +getLines() List~String~
     }
-    class RedTile
-    class ClosedInterval
-    class RowCoverage
-    class RedGreenTileArea
-    class LargestRectangleAreaCalculatorPart1
-    class LargestContainedRectangleAreaCalculatorPart2
+    class RedTile {
+        +x long
+        +y long
+        +x() long
+        +y() long
+        +rectangleAreaWith(RedTile) long
+    }
+    class ClosedInterval {
+        +start long
+        +end long
+        +start() long
+        +end() long
+        +contains(ClosedInterval) boolean
+    }
+    class RowCoverage {
+        +firstY long
+        +lastY long
+        +xIntervals List~ClosedInterval~
+        +intersectsRows(long, long) boolean
+        +containsXInterval(ClosedInterval) boolean
+    }
+    class RedGreenTileArea {
+        -vertices List~RedTile~
+        -rowCoverages List~RowCoverage~
+        +containsRectangle(RedTile, RedTile) boolean
+    }
+    class LargestRectangleAreaCalculatorPart1 {
+        +calculate(List~RedTile~) long
+    }
+    class LargestContainedRectangleAreaCalculatorPart2 {
+        +calculate(List~RedTile~) long
+    }
 
     Main --> MovieTheaterSolver
     Main --> FileRedTileSource

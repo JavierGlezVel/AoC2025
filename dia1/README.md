@@ -238,6 +238,8 @@ Contiene los detalles externos al dominio.
 classDiagram
     class Main
     class SafeSolver {
+        -source RotationSource
+        -parser RotationParser
         +solvePart1() int
         +solvePart2() int
     }
@@ -249,13 +251,17 @@ classDiagram
         +getLines() List~String~
     }
     class FileRotationSource {
+        -path String
         +getLines() List~String~
     }
     class Rotation {
+        +direction char
+        +steps int
         +direction() char
         +steps() int
     }
     class Dial {
+        -position int
         +rotate(Rotation)
         +getPosition() int
     }

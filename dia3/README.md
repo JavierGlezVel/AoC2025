@@ -281,6 +281,8 @@ Contiene los detalles externos al dominio.
 classDiagram
     class Main
     class LobbySolver {
+        -source BatteryBankSource
+        -parser BatteryBankParser
         +solvePart1() long
         +solvePart2() long
     }
@@ -292,17 +294,33 @@ classDiagram
         +getLines() List~String~
     }
     class FileBatteryBankSource {
+        -path String
         +getLines() List~String~
     }
-    class BatteryBank
+    class BatteryBank {
+        +ratings String
+        +ratings() String
+    }
     class JoltageCalculator {
         <<interface>>
         +calculate(BatteryBank) long
     }
-    class MaximumJoltageCalculator
-    class TotalOutputJoltageCalculator
-    class TotalOutputJoltageCalculatorPart1
-    class TotalOutputJoltageCalculatorPart2
+    class MaximumJoltageCalculator {
+        -batteriesToTurnOn int
+        +calculate(BatteryBank) long
+    }
+    class TotalOutputJoltageCalculator {
+        -joltageCalculator JoltageCalculator
+        +calculate(List~BatteryBank~) long
+    }
+    class TotalOutputJoltageCalculatorPart1 {
+        -calculator TotalOutputJoltageCalculator
+        +calculate(List~BatteryBank~) long
+    }
+    class TotalOutputJoltageCalculatorPart2 {
+        -calculator TotalOutputJoltageCalculator
+        +calculate(List~BatteryBank~) long
+    }
 
     Main --> LobbySolver
     Main --> FileBatteryBankSource

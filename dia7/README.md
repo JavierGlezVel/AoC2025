@@ -273,7 +273,9 @@ Contiene los detalles externos al dominio.
 classDiagram
     class Main
     class LaboratorySolver {
-        +solvePart1() long
+        -source DiagramSource
+        -parser TachyonManifoldParser
+        +solvePart1() int
         +solvePart2() BigInteger
     }
     class TachyonManifoldParser {
@@ -284,12 +286,32 @@ classDiagram
         +getLines() List~String~
     }
     class FileDiagramSource {
+        -path String
         +getLines() List~String~
     }
-    class TachyonManifold
-    class GridPosition
-    class BeamSplitCounterPart1
-    class TimelineCounterPart2
+    class TachyonManifold {
+        -START char
+        -SPLITTER char
+        -EMPTY char
+        +rows List~String~
+        +height() int
+        +width() int
+        +start() GridPosition
+        +isSplitterAt(GridPosition) boolean
+        +containsColumn(int) boolean
+    }
+    class GridPosition {
+        +row int
+        +column int
+        +row() int
+        +column() int
+    }
+    class BeamSplitCounterPart1 {
+        +count(TachyonManifold) int
+    }
+    class TimelineCounterPart2 {
+        +count(TachyonManifold) BigInteger
+    }
 
     Main --> LaboratorySolver
     Main --> FileDiagramSource

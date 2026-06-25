@@ -307,6 +307,8 @@ Contiene los detalles externos al dominio.
 classDiagram
     class Main
     class GiftShopSolver {
+        -source RangeSource
+        -parser ProductIdRangeParser
         +solvePart1() long
         +solvePart2() long
     }
@@ -318,9 +320,12 @@ classDiagram
         +getContent() String
     }
     class FileRangeSource {
+        -path String
         +getContent() String
     }
     class ProductIdRange {
+        +firstId long
+        +lastId long
         +firstId() long
         +lastId() long
         +contains(long) boolean

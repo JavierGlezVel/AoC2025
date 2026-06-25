@@ -283,7 +283,9 @@ Contiene los detalles externos al dominio.
 classDiagram
     class Main
     class TreeFarmSolver {
-        +solvePart1() long
+        -source TreeFarmSource
+        -parser TreeFarmParser
+        +solvePart1() int
     }
     class TreeFarmParser {
         +parse(List~String~) TreeFarmPlan
@@ -293,13 +295,33 @@ classDiagram
         +getLines() List~String~
     }
     class FileTreeFarmSource {
+        -path String
         +getLines() List~String~
     }
-    class TreeFarmPlan
-    class PresentShape
-    class TreeRegion
-    class Cell
-    class FittingRegionCounterPart1
+    class TreeFarmPlan {
+        +shapes List~PresentShape~
+        +regions List~TreeRegion~
+    }
+    class PresentShape {
+        +index int
+        +cells List~Cell~
+        +area() int
+        +variants() CellVariants
+    }
+    class TreeRegion {
+        +width int
+        +height int
+        +presentCounts List~Integer~
+        +area() int
+    }
+    class Cell {
+        +x int
+        +y int
+    }
+    class FittingRegionCounterPart1 {
+        -EXACT_SOLVER_MAX_CELLS int
+        +countFittingRegions(TreeFarmPlan) int
+    }
 
     Main --> TreeFarmSolver
     Main --> FileTreeFarmSource

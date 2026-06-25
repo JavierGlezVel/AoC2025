@@ -255,8 +255,10 @@ Contiene los detalles externos al dominio.
 classDiagram
     class Main
     class ReactorSolver {
-        +solvePart1() long
-        +solvePart2() long
+        -source DeviceNetworkSource
+        -parser DeviceNetworkParser
+        +solvePart1() BigInteger
+        +solvePart2() BigInteger
     }
     class DeviceNetworkParser {
         +parse(List~String~) DeviceNetwork
@@ -266,11 +268,29 @@ classDiagram
         +getLines() List~String~
     }
     class FileDeviceNetworkSource {
+        -path String
         +getLines() List~String~
     }
-    class DeviceNetwork
-    class ReactorPathCounterPart1
-    class ReactorRequiredDevicePathCounterPart2
+    class DeviceNetwork {
+        +START_DEVICE String
+        +OUTPUT_DEVICE String
+        +outputsByDevice DeviceOutputMap
+        +outputsFrom(String) List~String~
+    }
+    class ReactorPathCounterPart1 {
+        +countPaths(DeviceNetwork) BigInteger
+    }
+    class ReactorRequiredDevicePathCounterPart2 {
+        -START_DEVICE String
+        -FIRST_REQUIRED_DEVICE String
+        -SECOND_REQUIRED_DEVICE String
+        +countPaths(DeviceNetwork) BigInteger
+    }
+    class PathState {
+        +device String
+        +visitedDac boolean
+        +visitedFft boolean
+    }
 
     Main --> ReactorSolver
     Main --> FileDeviceNetworkSource
@@ -280,6 +300,7 @@ classDiagram
     DeviceNetworkParser --> DeviceNetwork
     ReactorPathCounterPart1 --> DeviceNetwork
     ReactorRequiredDevicePathCounterPart2 --> DeviceNetwork
+    ReactorRequiredDevicePathCounterPart2 --> PathState
 ```
 
 ## Principios aplicados

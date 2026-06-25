@@ -325,8 +325,10 @@ Contiene los detalles externos al dominio.
 classDiagram
     class Main
     class TrashCompactorSolver {
-        +solvePart1() long
-        +solvePart2() long
+        -source WorksheetSource
+        -parser MathWorksheetParser
+        +solvePart1() BigInteger
+        +solvePart2() BigInteger
     }
     class MathWorksheetParser {
         +parse(List~String~) List~MathProblem~
@@ -336,12 +338,30 @@ classDiagram
         +getLines() List~String~
     }
     class FileWorksheetSource {
+        -path String
         +getLines() List~String~
     }
-    class MathProblem
-    class MathOperation
-    class WorksheetGrandTotalCalculatorPart1
-    class WorksheetGrandTotalCalculatorPart2
+    class MathProblem {
+        +numbers List~BigInteger~
+        +operation MathOperation
+        +numbers() List~BigInteger~
+        +operation() MathOperation
+    }
+    class MathOperation {
+        <<enumeration>>
+        -symbol char
+        +ADD
+        +MULTIPLY
+        +fromSymbol(char) MathOperation
+        +symbol() char
+        +apply(List~BigInteger~) BigInteger
+    }
+    class WorksheetGrandTotalCalculatorPart1 {
+        +calculate(List~MathProblem~) BigInteger
+    }
+    class WorksheetGrandTotalCalculatorPart2 {
+        +calculate(List~MathProblem~) BigInteger
+    }
 
     Main --> TrashCompactorSolver
     Main --> FileWorksheetSource

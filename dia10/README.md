@@ -291,10 +291,14 @@ Contiene los detalles externos al dominio.
 classDiagram
     class Main
     class FactorySolver {
-        +solvePart1() long
+        -source FactoryMachineSource
+        -parser FactoryMachineParser
+        +solvePart1() int
         +solvePart2() long
     }
     class FactoryMachineParser {
+        -MACHINE_PATTERN Pattern
+        -BUTTON_PATTERN Pattern
         +parse(List~String~) List~FactoryMachine~
     }
     class FactoryMachineSource {
@@ -302,13 +306,35 @@ classDiagram
         +getLines() List~String~
     }
     class FileFactoryMachineSource {
+        -path String
         +getLines() List~String~
     }
-    class FactoryMachine
-    class MinimumButtonPressesCalculatorPart1
-    class MinimumJoltageButtonPressesCalculatorPart2
+    class FactoryMachine {
+        +lightCount int
+        +targetMask int
+        +buttonMasks List~Integer~
+        +joltageRequirements List~Integer~
+    }
+    class MinimumButtonPressesCalculatorPart1 {
+        +calculate(List~FactoryMachine~) int
+    }
+    class MinimumJoltageButtonPressesCalculatorPart2 {
+        -NO_SOLUTION long
+        +calculate(List~FactoryMachine~) long
+    }
+    class LinearSystem {
+        +matrix FractionMatrix
+        +pivotColumns List~Integer~
+        +freeColumns List~Integer~
+        +rank int
+    }
     class Fraction {
+        +numerator long
+        +denominator long
         +of(long) Fraction
+        +subtract(Fraction) Fraction
+        +multiply(Fraction) Fraction
+        +divide(Fraction) Fraction
     }
 
     Main --> FactorySolver
@@ -319,6 +345,8 @@ classDiagram
     FactoryMachineParser --> FactoryMachine
     MinimumButtonPressesCalculatorPart1 --> FactoryMachine
     MinimumJoltageButtonPressesCalculatorPart2 --> FactoryMachine
+    MinimumJoltageButtonPressesCalculatorPart2 --> LinearSystem
+    LinearSystem --> Fraction
     MinimumJoltageButtonPressesCalculatorPart2 --> Fraction
 ```
 

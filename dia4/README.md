@@ -232,8 +232,10 @@ Contiene los detalles externos al dominio.
 classDiagram
     class Main
     class PrintingDepartmentSolver {
-        +solvePart1() long
-        +solvePart2() long
+        -source DiagramSource
+        -parser PaperRollMapParser
+        +solvePart1() int
+        +solvePart2() int
     }
     class PaperRollMapParser {
         +parse(List~String~) PaperRollMap
@@ -243,12 +245,32 @@ classDiagram
         +getLines() List~String~
     }
     class FileDiagramSource {
+        -path String
         +getLines() List~String~
     }
-    class PaperRollMap
-    class GridPosition
-    class AccessiblePaperRollCounterPart1
-    class RemovablePaperRollCounterPart2
+    class PaperRollMap {
+        +rows List~String~
+        +height() int
+        +width() int
+        +isPaperRollAt(GridPosition) boolean
+        +contains(GridPosition) boolean
+        +countAdjacentPaperRolls(GridPosition) int
+        +adjacentPositions(GridPosition) List~GridPosition~
+    }
+    class GridPosition {
+        +row int
+        +column int
+        +row() int
+        +column() int
+    }
+    class AccessiblePaperRollCounterPart1 {
+        -MAXIMUM_ADJACENT_ROLLS_TO_ACCESS int
+        +count(PaperRollMap) int
+    }
+    class RemovablePaperRollCounterPart2 {
+        -MAXIMUM_ADJACENT_ROLLS_TO_ACCESS int
+        +count(PaperRollMap) int
+    }
 
     Main --> PrintingDepartmentSolver
     Main --> FileDiagramSource

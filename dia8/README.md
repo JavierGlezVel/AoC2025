@@ -271,6 +271,9 @@ Contiene los detalles externos al dominio.
 classDiagram
     class Main
     class PlaygroundSolver {
+        -CONNECTIONS_TO_PROCESS_PART_1 int
+        -source JunctionBoxSource
+        -parser JunctionBoxParser
         +solvePart1() long
         +solvePart2() long
     }
@@ -282,14 +285,44 @@ classDiagram
         +getLines() List~String~
     }
     class FileJunctionBoxSource {
+        -path String
         +getLines() List~String~
     }
-    class JunctionBox
-    class ConnectionCandidate
-    class ConnectionCandidateGenerator
-    class CircuitNetwork
-    class CircuitSizeProductCalculatorPart1
-    class FinalConnectionXProductCalculatorPart2
+    class JunctionBox {
+        +x long
+        +y long
+        +z long
+        +x() long
+        +y() long
+        +z() long
+        +distanceSquaredTo(JunctionBox) long
+    }
+    class ConnectionCandidate {
+        +firstIndex int
+        +secondIndex int
+        +distanceSquared long
+        +firstIndex() int
+        +secondIndex() int
+        +distanceSquared() long
+    }
+    class ConnectionCandidateGenerator {
+        +generateSorted(List~JunctionBox~) List~ConnectionCandidate~
+    }
+    class CircuitNetwork {
+        -parents IntArray
+        -sizes IntArray
+        -circuitCount int
+        +connect(int, int) boolean
+        +isSingleCircuit() boolean
+        +largestCircuitSizes(int) List~Integer~
+    }
+    class CircuitSizeProductCalculatorPart1 {
+        -CIRCUITS_TO_MULTIPLY int
+        +calculate(List~JunctionBox~, int) long
+    }
+    class FinalConnectionXProductCalculatorPart2 {
+        +calculate(List~JunctionBox~) long
+    }
 
     Main --> PlaygroundSolver
     Main --> FileJunctionBoxSource
