@@ -342,6 +342,8 @@ classDiagram
     FileFactoryMachineSource ..|> FactoryMachineSource
     FactorySolver --> FactoryMachineSource
     FactorySolver --> FactoryMachineParser
+    FactorySolver --> MinimumButtonPressesCalculatorPart1
+    FactorySolver --> MinimumJoltageButtonPressesCalculatorPart2
     FactoryMachineParser --> FactoryMachine
     MinimumButtonPressesCalculatorPart1 --> FactoryMachine
     MinimumJoltageButtonPressesCalculatorPart2 --> FactoryMachine

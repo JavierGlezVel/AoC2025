@@ -368,6 +368,8 @@ classDiagram
     FileWorksheetSource ..|> WorksheetSource
     TrashCompactorSolver --> WorksheetSource
     TrashCompactorSolver --> MathWorksheetParser
+    TrashCompactorSolver --> WorksheetGrandTotalCalculatorPart1
+    TrashCompactorSolver --> WorksheetGrandTotalCalculatorPart2
     MathWorksheetParser --> MathProblem
     MathProblem --> MathOperation
     WorksheetGrandTotalCalculatorPart1 --> MathProblem

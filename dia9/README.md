@@ -367,6 +367,8 @@ classDiagram
     FileRedTileSource ..|> RedTileSource
     MovieTheaterSolver --> RedTileSource
     MovieTheaterSolver --> RedTileParser
+    MovieTheaterSolver --> LargestRectangleAreaCalculatorPart1
+    MovieTheaterSolver --> LargestContainedRectangleAreaCalculatorPart2
     RedTileParser --> RedTile
     RedGreenTileArea --> RedTile
     RedGreenTileArea --> RowCoverage

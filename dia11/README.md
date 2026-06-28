@@ -297,6 +297,8 @@ classDiagram
     FileDeviceNetworkSource ..|> DeviceNetworkSource
     ReactorSolver --> DeviceNetworkSource
     ReactorSolver --> DeviceNetworkParser
+    ReactorSolver --> ReactorPathCounterPart1
+    ReactorSolver --> ReactorRequiredDevicePathCounterPart2
     DeviceNetworkParser --> DeviceNetwork
     ReactorPathCounterPart1 --> DeviceNetwork
     ReactorRequiredDevicePathCounterPart2 --> DeviceNetwork

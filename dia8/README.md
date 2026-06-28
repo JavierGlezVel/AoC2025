@@ -329,6 +329,8 @@ classDiagram
     FileJunctionBoxSource ..|> JunctionBoxSource
     PlaygroundSolver --> JunctionBoxSource
     PlaygroundSolver --> JunctionBoxParser
+    PlaygroundSolver --> CircuitSizeProductCalculatorPart1
+    PlaygroundSolver --> FinalConnectionXProductCalculatorPart2
     JunctionBoxParser --> JunctionBox
     ConnectionCandidateGenerator --> JunctionBox
     ConnectionCandidateGenerator --> ConnectionCandidate

@@ -318,6 +318,8 @@ classDiagram
     FileDiagramSource ..|> DiagramSource
     LaboratorySolver --> DiagramSource
     LaboratorySolver --> TachyonManifoldParser
+    LaboratorySolver --> BeamSplitCounterPart1
+    LaboratorySolver --> TimelineCounterPart2
     TachyonManifoldParser --> TachyonManifold
     TachyonManifold --> GridPosition
     BeamSplitCounterPart1 --> TachyonManifold

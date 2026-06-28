@@ -328,6 +328,7 @@ classDiagram
     FileTreeFarmSource ..|> TreeFarmSource
     TreeFarmSolver --> TreeFarmSource
     TreeFarmSolver --> TreeFarmParser
+    TreeFarmSolver --> FittingRegionCounterPart1
     TreeFarmParser --> TreeFarmPlan
     TreeFarmPlan --> PresentShape
     TreeFarmPlan --> TreeRegion

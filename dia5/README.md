@@ -323,6 +323,8 @@ classDiagram
     FileDatabaseSource ..|> DatabaseSource
     CafeteriaSolver --> DatabaseSource
     CafeteriaSolver --> InventoryDatabaseParser
+    CafeteriaSolver --> FreshIngredientCounterPart1
+    CafeteriaSolver --> FreshIngredientIdCoverageCounterPart2
     InventoryDatabaseParser --> InventoryDatabase
     InventoryDatabase --> FreshIngredientIdRange
     FreshIngredientCounterPart1 --> InventoryDatabase
