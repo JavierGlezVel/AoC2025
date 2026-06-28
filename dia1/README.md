@@ -429,25 +429,6 @@ encapsula una acción ejecutable con un método tipo `execute` ni desacopla un e
 de un receptor. Tampoco se aplica `Observer`, porque no hay suscripciones ni
 notificación de cambios entre objetos.
 
-## Otras técnicas de diseño
-
-### Objeto de valor
-
-`Rotation` se modela como `record`, por lo que representa un dato del dominio con
-identidad basada en sus valores (`direction` y `steps`). Además, concentra la
-validación de una rotación válida.
-
-### Servicio de dominio
-
-`PasswordCalculatorPart1` y `PasswordCalculatorPart2` actúan como servicios de
-dominio: no representan entidades con identidad propia, sino operaciones del dominio
-que calculan la contraseña a partir de una lista de rotaciones.
-
-### Orquestador de caso de uso
-
-`SafeSolver` ofrece métodos simples (`solvePart1` y `solvePart2`) que ocultan los
-pasos internos: leer entrada, parsear rotaciones y calcular la respuesta.
-
 ## Tests
 
 Los tests están en:

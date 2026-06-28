@@ -446,36 +446,6 @@ apoya en `Iterable`/`Iterator`, aunque el código no cree el iterador manualment
 No se aplica `Command`, porque no hay objetos que encapsulen acciones ejecutables.
 Tampoco se aplica `Observer`, porque no hay suscripciones ni notificación de cambios.
 
-## Otras técnicas de diseño
-
-### Abstracción del origen de datos
-
-`BatteryBankSource` actúa como abstracción del origen de datos. El dominio no
-depende de si la entrada viene de un fichero, de memoria o de otro sistema.
-
-### Objeto de valor
-
-`BatteryBank` se modela como `record`, por lo que representa un valor del dominio
-definido por sus datos. Además, valida sus invariantes al construirse.
-
-### Servicio de dominio
-
-`MaximumJoltageCalculator`, `TotalOutputJoltageCalculator`,
-`TotalOutputJoltageCalculatorPart1` y `TotalOutputJoltageCalculatorPart2` actúan como
-servicios de dominio. No representan entidades con identidad propia, sino operaciones
-del problema que reciben datos y devuelven un resultado.
-
-### Estrategia de cálculo
-
-`JoltageCalculator` permite separar el algoritmo de cálculo del código que suma los
-resultados. La implementación usada actualmente es `MaximumJoltageCalculator`, que
-se configura con el número de baterías que hay que encender.
-
-### Orquestador de caso de uso
-
-`LobbySolver` ofrece métodos simples (`solvePart1` y `solvePart2`) que ocultan los
-pasos internos: leer entrada, parsear bancos y calcular la suma.
-
 ## Tests
 
 Los tests están en:

@@ -437,29 +437,6 @@ al recorrer regiones, formas y colocaciones. En Java este recorrido se apoya en
 No se aplica `Command`, porque no hay objetos que encapsulen acciones ejecutables.
 Tampoco se aplica `Observer`, porque no hay suscripciones ni notificación de cambios.
 
-## Otras técnicas de diseño
-
-### Abstracción del origen de datos
-
-`TreeFarmSource` abstrae el origen de datos. El dominio no depende de si la entrada
-viene de un fichero, de memoria o de otro sistema.
-
-### Objeto de valor
-
-`Cell`, `PresentShape`, `TreeRegion` y `TreeFarmPlan` se modelan como `record`, por
-lo que representan valores del dominio definidos por sus datos.
-
-### Servicio de dominio
-
-`FittingRegionCounterPart1` actúa como servicio de dominio: no representa una entidad
-con identidad propia, sino una operación que calcula el resultado de la parte 1.
-
-### Backtracking exacto
-
-Para regiones pequeñas, el solver genera todas las colocaciones posibles de cada
-forma y usa backtracking con máscaras de bits para comprobar si existe una colocación
-sin solapamientos.
-
 ## Tests
 
 Los tests están en:

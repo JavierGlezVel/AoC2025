@@ -461,33 +461,6 @@ No se aplica `Command`, porque los botones se modelan como datos de la máquina 
 como objetos que encapsulen una acción ejecutable. Tampoco se aplica `Observer`,
 porque no hay suscripciones ni notificación de cambios.
 
-## Otras técnicas de diseño
-
-### Abstracción del origen de datos
-
-`FactoryMachineSource` abstrae el origen de datos. El dominio no depende de si la
-entrada viene de un fichero, de memoria o de otro sistema.
-
-### Objeto de valor
-
-`FactoryMachine` se modela como `record`, por lo que representa un valor del dominio
-definido por sus datos.
-
-### Servicio de dominio
-
-`MinimumButtonPressesCalculatorPart1` actúa como servicio de dominio: no representa
-una entidad con identidad propia, sino una operación que calcula el resultado de la
-parte 1.
-
-`MinimumJoltageButtonPressesCalculatorPart2` también actúa como servicio de dominio,
-pero para resolver los contadores de joltage de la segunda parte.
-
-### Eliminación gaussiana
-
-La parte 2 usa eliminación gaussiana con fracciones exactas para transformar el
-sistema de botones y contadores. Después enumera las variables libres y acepta solo
-soluciones enteras no negativas.
-
 ## Tests
 
 Los tests están en:

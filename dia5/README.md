@@ -430,39 +430,6 @@ al recorrer rangos de ingredientes. En Java este recorrido se apoya en
 No se aplica `Command`, porque no hay objetos que encapsulen acciones ejecutables.
 Tampoco se aplica `Observer`, porque no hay suscripciones ni notificación de cambios.
 
-## Otras técnicas de diseño
-
-### Abstracción del origen de datos
-
-`DatabaseSource` abstrae el origen de datos. El dominio no depende de si la entrada
-viene de un fichero, de memoria o de otro sistema.
-
-### Objeto de valor
-
-`FreshIngredientIdRange` se modela como `record`, por lo que representa un valor del
-dominio definido por sus datos (`firstId` y `lastId`). Además, valida sus invariantes
-al construirse.
-
-### Servicio de dominio
-
-`FreshIngredientCounterPart1` actúa como servicio de dominio: no representa una
-entidad con identidad propia, sino una operación que calcula el resultado de la parte
-1.
-
-`FreshIngredientIdCoverageCounterPart2` también actúa como servicio de dominio, pero
-para contar la cobertura total de los rangos.
-
-### Fusión de intervalos
-
-La parte 2 usa una técnica de fusión de intervalos: ordenar por inicio, unir rangos
-solapados o contiguos y sumar sus tamaños. Esto evita generar explícitamente todos
-los IDs de rangos enormes.
-
-### Orquestador de caso de uso
-
-`CafeteriaSolver` ofrece métodos simples (`solvePart1` y `solvePart2`) que ocultan los pasos
-internos: leer entrada, parsear la base de datos y calcular la respuesta.
-
 ## Tests
 
 Los tests están en:

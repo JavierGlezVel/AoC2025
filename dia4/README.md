@@ -384,37 +384,6 @@ al recorrer posiciones adyacentes del mapa. En Java este recorrido se apoya en
 No se aplica `Command`, porque no hay objetos que encapsulen acciones ejecutables.
 Tampoco se aplica `Observer`, porque no hay suscripciones ni notificación de cambios.
 
-## Otras técnicas de diseño
-
-### Abstracción del origen de datos
-
-`DiagramSource` abstrae el origen de datos. El dominio no depende de si la entrada
-viene de un fichero, de memoria o de otro sistema.
-
-### Objeto de valor
-
-`GridPosition` se modela como `record`, por lo que representa un valor del dominio
-definido por sus datos (`row` y `column`).
-
-### Servicio de dominio
-
-`AccessiblePaperRollCounterPart1` actúa como servicio de dominio: no representa una
-entidad con identidad propia, sino una operación que calcula el resultado de la parte
-1.
-
-`RemovablePaperRollCounterPart2` también actúa como servicio de dominio, pero para
-la regla iterativa de la parte 2.
-
-### Cola de trabajo
-
-La parte 2 usa una cola para procesar rollos que ya cumplen la regla de acceso. Esto
-evita buscar desde cero en todo el mapa después de cada retirada.
-
-### Orquestador de caso de uso
-
-`PrintingDepartmentSolver` ofrece métodos simples (`solvePart1` y `solvePart2`) que
-ocultan los pasos internos: leer entrada, parsear el mapa y calcular la respuesta.
-
 ## Tests
 
 Los tests están en:

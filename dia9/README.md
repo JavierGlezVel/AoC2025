@@ -485,24 +485,6 @@ al recorrer baldosas e intervalos. En Java este recorrido se apoya en
 No se aplica `Command`, porque no hay objetos que encapsulen acciones ejecutables.
 Tampoco se aplica `Observer`, porque no hay suscripciones ni notificación de cambios.
 
-## Otras técnicas de diseño
-
-### Abstracción del origen de datos
-
-`RedTileSource` abstrae el origen de datos. El dominio no depende de si la entrada
-viene de un fichero, de memoria o de otro sistema.
-
-### Objeto de valor
-
-`RedTile` se modela como `record`, por lo que representa un valor del dominio
-definido por sus coordenadas.
-
-### Servicio de dominio
-
-`LargestRectangleAreaCalculatorPart1` y `LargestContainedRectangleAreaCalculatorPart2`
-actúan como servicios de dominio: no representan entidades con identidad propia,
-sino operaciones que calculan los resultados de cada parte.
-
 ## Tests
 
 Los tests están en:

@@ -499,37 +499,6 @@ No se aplica `Command`, porque no hay objetos que encapsulen acciones ejecutable
 para invocarlas después. Tampoco se aplica `Observer`, porque no hay suscripciones
 ni notificación de cambios entre objetos.
 
-## Otras técnicas de diseño
-
-### Abstracción del origen de datos
-
-`RangeSource` actúa como abstracción del origen de datos. El dominio no depende de
-si la entrada viene de un fichero, de memoria o de cualquier otra fuente.
-
-### Objeto de valor
-
-`ProductIdRange` se modela como `record`, por lo que representa un valor del
-dominio definido por sus datos (`firstId` y `lastId`). Además, valida sus invariantes al
-construirse.
-
-### Servicio de dominio
-
-`InvalidProductIdSumCalculatorPart1`, `InvalidProductIdSumCalculatorPart2` e
-`InvalidProductIdSumCalculator` actúan como servicios de dominio: reciben datos del
-problema y devuelven resultados calculados, sin representar entidades con identidad
-propia.
-
-### Generador de candidatos
-
-`RepeatedTwiceProductIdGenerator` y `RepeatedAtLeastTwiceProductIdGenerator`
-encapsulan las estrategias de generación de candidatos inválidos. Esto evita que los
-calculadores conozcan los detalles de construcción de candidatos.
-
-### Orquestador de caso de uso
-
-`GiftShopSolver` ofrece métodos simples (`solvePart1` y `solvePart2`) que ocultan los
-pasos internos: leer entrada, parsear rangos y calcular la suma.
-
 ## Tests
 
 Los tests están en:

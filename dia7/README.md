@@ -423,30 +423,6 @@ al recorrer columnas activas y líneas temporales. En Java este recorrido se apo
 No se aplica `Command`, porque no hay objetos que encapsulen acciones ejecutables.
 Tampoco se aplica `Observer`, porque no hay suscripciones ni notificación de cambios.
 
-## Otras técnicas de diseño
-
-### Abstracción del origen de datos
-
-`DiagramSource` abstrae el origen de datos. El dominio no depende de si la entrada
-viene de un fichero, de memoria o de otro sistema.
-
-### Objeto de valor
-
-`TachyonManifold` y `GridPosition` se modelan como `record`, por lo que representan
-valores del dominio definidos por sus datos. `TachyonManifold` además valida sus
-invariantes al construirse.
-
-### Servicio de dominio
-
-`BeamSplitCounterPart1` y `TimelineCounterPart2` actúan como servicios de dominio:
-no representan entidades con identidad propia, sino operaciones que calculan los
-resultados de cada parte.
-
-### Orquestador de caso de uso
-
-`LaboratorySolver` ofrece `solvePart1` y `solvePart2`, ocultando los pasos internos:
-leer entrada, parsear el diagrama y calcular la respuesta.
-
 ## Tests
 
 Los tests están en:

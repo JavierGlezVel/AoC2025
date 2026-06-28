@@ -401,34 +401,6 @@ al recorrer salidas de dispositivos. En Java este recorrido se apoya en
 No se aplica `Command`, porque no hay objetos que encapsulen acciones ejecutables.
 Tampoco se aplica `Observer`, porque no hay suscripciones ni notificación de cambios.
 
-## Otras técnicas de diseño
-
-### Abstracción del origen de datos
-
-`DeviceNetworkSource` abstrae el origen de datos. El dominio no depende de si la
-entrada viene de un fichero, de memoria o de otro sistema.
-
-### Objeto de valor
-
-`DeviceNetwork` se modela como `record`, por lo que representa un valor del dominio
-definido por sus conexiones.
-
-### Servicio de dominio
-
-`ReactorPathCounterPart1` actúa como servicio de dominio: no representa una entidad
-con identidad propia, sino una operación que calcula el resultado de la parte 1.
-
-`ReactorRequiredDevicePathCounterPart2` también actúa como servicio de dominio, pero
-para la regla de caminos obligatorios de la segunda parte.
-
-### Memoización
-
-El conteo de caminos usa memoización para no recalcular el número de caminos desde
-un mismo dispositivo cuando varios caminos previos llegan a él.
-
-En la parte 2 la clave memoizada no es solo el dispositivo, sino también los dos
-booleanos que indican si el camino ya ha pasado por `dac` y por `fft`.
-
 ## Tests
 
 Los tests están en:

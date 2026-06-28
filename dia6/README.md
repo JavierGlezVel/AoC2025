@@ -474,38 +474,6 @@ al recorrer problemas y operaciones. En Java este recorrido se apoya en
 No se aplica `Command`, porque no hay objetos que encapsulen acciones ejecutables.
 Tampoco se aplica `Observer`, porque no hay suscripciones ni notificación de cambios.
 
-## Otras técnicas de diseño
-
-### Abstracción del origen de datos
-
-`WorksheetSource` abstrae el origen de datos. El dominio no depende de si la entrada
-viene de un fichero, de memoria o de otro sistema.
-
-### Objeto de valor
-
-`MathProblem` se modela como `record`, por lo que representa un valor del dominio
-definido por sus datos. Además, valida sus invariantes al construirse.
-
-### Operación polimórfica con `enum`
-
-`MathOperation` encapsula el algoritmo de cada operación. El calculador no necesita
-un condicional para saber cómo sumar o multiplicar; solo delega en la operación del
-problema.
-
-### Servicio de dominio
-
-`WorksheetGrandTotalCalculatorPart1` actúa como servicio de dominio: no representa
-una entidad con identidad propia, sino una operación que calcula el resultado de la
-parte 1.
-
-`WorksheetGrandTotalCalculatorPart2` también actúa como servicio de dominio, pero
-para la lectura por columnas de la segunda parte.
-
-### Orquestador de caso de uso
-
-`TrashCompactorSolver` ofrece `solvePart1` y `solvePart2`, ocultando los pasos
-internos: leer entrada, parsear la hoja y calcular la respuesta.
-
 ## Tests
 
 Los tests están en:

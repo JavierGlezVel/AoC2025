@@ -436,29 +436,6 @@ al recorrer candidatos de conexión. En Java este recorrido se apoya en
 No se aplica `Command`, porque no hay objetos que encapsulen acciones ejecutables.
 Tampoco se aplica `Observer`, porque no hay suscripciones ni notificación de cambios.
 
-## Otras técnicas de diseño
-
-### Abstracción del origen de datos
-
-`JunctionBoxSource` abstrae el origen de datos. El dominio no depende de si la
-entrada viene de un fichero, de memoria o de otro sistema.
-
-### Objeto de valor
-
-`JunctionBox` se modela como `record`, por lo que representa un valor del dominio
-definido por sus coordenadas.
-
-### Servicio de dominio
-
-`CircuitSizeProductCalculatorPart1` y `FinalConnectionXProductCalculatorPart2`
-actúan como servicios de dominio: no representan entidades con identidad propia,
-sino operaciones que calculan los resultados de cada parte.
-
-### Unión-búsqueda
-
-`CircuitNetwork` usa unión-búsqueda con compresión de caminos y unión por tamaño.
-Esto permite unir circuitos y consultar componentes de forma eficiente.
-
 ## Tests
 
 Los tests están en:
