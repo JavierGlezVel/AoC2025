@@ -2,15 +2,14 @@
 
 ## Problema
 
-El problema ocurre en una granja de árboles de Navidad. La entrada contiene:
+La entrada describe regalos y regiones donde colocarlos:
 
 - una lista de formas de regalos, representadas con `#` y `.`;
 - una lista de regiones rectangulares bajo los árboles;
 - para cada región, cuántos regalos de cada forma deben colocarse.
 
-Los regalos pueden rotarse y reflejarse, pero deben colocarse sobre una cuadrícula
-bidimensional. No pueden solaparse, aunque los huecos `.` de una forma no bloquean a
-otras formas.
+Los regalos se pueden girar o reflejar. Deben colocarse sin solaparse dentro de cada
+región.
 
 La entrada está en:
 
@@ -20,7 +19,7 @@ src/main/resources/input.txt
 
 ## Parte 1
 
-El objetivo es contar cuántas regiones pueden contener todos los regalos indicados.
+Hay que contar cuántas regiones pueden contener todos los regalos que piden.
 
 Con el ejemplo oficial:
 

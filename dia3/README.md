@@ -2,14 +2,11 @@
 
 ## Problema
 
-El problema ocurre en el lobby, donde el escalator necesita alimentación de
-emergencia. La entrada contiene una línea por cada banco de baterías. Cada carácter
-de la línea representa el joltage de una batería, siempre con un valor entre `1` y
-`9`.
+La entrada contiene varios bancos de baterías. Cada línea es un banco, y cada dígito
+representa el joltage de una batería.
 
-Dentro de cada banco hay que encender un número concreto de baterías. El joltage
-generado por el banco es el número formado por esas baterías en el mismo orden en el
-que aparecen. No se pueden reordenar baterías.
+En cada banco hay que escoger algunas baterías. El número final se forma con los
+dígitos escogidos, manteniendo el orden original.
 
 Por ejemplo, en el banco `12345`, si se encienden las baterías `2` y `4`, el banco
 produce `24` jolts.
@@ -22,8 +19,8 @@ src/main/resources/input.txt
 
 ## Parte 1
 
-En la primera parte hay que encender exactamente dos baterías por banco. El objetivo
-es encontrar el mayor joltage que puede producir cada banco y sumar esos máximos.
+Hay que escoger dos baterías por banco para formar el mayor número posible. Después
+se suman los mejores valores de todos los bancos.
 
 Con el ejemplo oficial:
 
@@ -55,9 +52,8 @@ Con el input del proyecto, la respuesta de la parte 1 es:
 
 ## Parte 2
 
-En la segunda parte hay que encender exactamente doce baterías por banco. El joltage
-producido por cada banco pasa a ser un número de 12 dígitos, por lo que la suma ya no
-cabe de forma segura en un `int` y se calcula con `long`.
+Ahora hay que escoger doce baterías por banco. La idea es la misma que en la parte 1,
+pero el número final tiene doce dígitos.
 
 Con el mismo ejemplo oficial, los mayores joltages son:
 

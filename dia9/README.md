@@ -2,22 +2,18 @@
 
 ## Problema
 
-El problema ocurre en un cine de la base del Polo Norte. La entrada contiene las
-posiciones de baldosas rojas en una cuadrícula:
+La entrada contiene posiciones de baldosas rojas en una cuadrícula:
 
 ```text
 7,1
 11,1
 ```
 
-Cada línea representa una posición `X,Y`. Se puede elegir cualquier pareja de
-baldosas rojas como esquinas opuestas de un rectángulo. El objetivo es encontrar el
-área máxima posible.
+Cada línea es una posición `X,Y`. Se pueden elegir dos baldosas rojas como esquinas
+opuestas de un rectángulo.
 
-En la segunda parte, las baldosas rojas forman un bucle ortogonal: cada baldosa roja
-está conectada con la anterior y la siguiente mediante una línea recta de baldosas
-verdes. También son verdes las baldosas interiores al bucle. El rectángulo elegido
-solo puede contener baldosas rojas o verdes.
+En la parte 2, las baldosas rojas delimitan una zona. El rectángulo elegido debe
+quedar dentro de esa zona.
 
 La entrada está en:
 
@@ -27,7 +23,8 @@ src/main/resources/input.txt
 
 ## Parte 1
 
-El área se calcula contando baldosas, por lo que las dimensiones son inclusivas:
+Hay que encontrar el rectángulo de mayor área usando dos baldosas rojas como esquinas.
+El área cuenta las baldosas incluidas:
 
 ```text
 área = (|x1 - x2| + 1) * (|y1 - y2| + 1)
@@ -60,8 +57,8 @@ Con el input del proyecto, la respuesta de la parte 1 es:
 
 ## Parte 2
 
-El rectángulo sigue teniendo que usar dos baldosas rojas como esquinas opuestas, pero
-ahora todo su contenido debe quedar dentro del área roja o verde del bucle.
+La idea es la misma, pero ahora el rectángulo completo debe estar dentro del área
+válida marcada por las baldosas.
 
 Con el mismo ejemplo oficial, el resultado es:
 

@@ -2,21 +2,17 @@
 
 ## Problema
 
-El problema ocurre en un laboratorio de teleportacion. La entrada representa un
-diagrama de un colector de taquiones:
+La entrada es un diagrama de un colector de taquiones:
 
 - `S` indica por donde entra el haz inicial.
 - `.` indica espacio vacío.
 - `^` indica un divisor.
 
-Los haces siempre avanzan hacia abajo. Si un haz llega a un divisor, ese haz se
-detiene y se emiten dos haces nuevos desde las columnas inmediatamente izquierda y
-derecha del divisor. Si varios haces llegan a la misma posición, se comportan como un
-único haz a partir de ahí.
+El haz siempre baja. Si llega a un divisor (`^`), se separa en dos haces: uno hacia
+la columna izquierda y otro hacia la derecha.
 
-En la segunda parte el colector se interpreta como un colector cuántico: no se
-fusionan haces clásicos, sino líneas temporales. Dos caminos distintos que llegan a
-la misma posición siguen representando dos líneas temporales distintas.
+En la parte 1 los haces que llegan al mismo sitio se juntan. En la parte 2 se cuentan
+como líneas temporales distintas.
 
 La entrada está en:
 
@@ -26,7 +22,7 @@ src/main/resources/input.txt
 
 ## Parte 1
 
-El objetivo es contar cuántas veces se divide un haz.
+Hay que contar cuántas veces se divide un haz al pasar por divisores.
 
 Con el ejemplo oficial:
 
@@ -63,8 +59,8 @@ Con el input del proyecto, la respuesta de la parte 1 es:
 
 ## Parte 2
 
-El objetivo es contar cuántas líneas temporales quedan activas después de que una
-partícula complete todos sus recorridos posibles por el colector.
+Hay que contar cuántas líneas temporales resultan después de seguir todos los caminos
+posibles.
 
 Con el mismo ejemplo oficial, el resultado es:
 

@@ -2,18 +2,16 @@
 
 ## Problema
 
-El problema ocurre en un parque subterráneo. La entrada contiene posiciones de cajas
-de conexión en un espacio tridimensional. Cada línea tiene coordenadas `X,Y,Z`:
+La entrada contiene cajas de conexión en un espacio 3D. Cada línea tiene coordenadas
+`X,Y,Z`:
 
 ```text
 162,817,812
 57,618,57
 ```
 
-Los elfos conectan parejas de cajas empezando por las que están más cerca en
-distancia recta. Cuando dos cajas se conectan, sus circuitos se unen. Si las dos cajas
-ya estaban en el mismo circuito, esa conexión no cambia la red, pero sigue formando
-parte de la lista de conexiones más cortas procesadas.
+Las cajas se conectan por parejas, empezando por las parejas más cercanas. Cuando se
+conectan dos cajas de circuitos distintos, esos circuitos se unen.
 
 La entrada está en:
 
@@ -23,8 +21,8 @@ src/main/resources/input.txt
 
 ## Parte 1
 
-El objetivo es procesar las 1000 parejas de cajas más cercanas y multiplicar los
-tamaños de los tres circuitos más grandes que queden después.
+Hay que procesar las 1000 conexiones más cortas y multiplicar los tamaños de los
+tres circuitos más grandes que queden.
 
 Con el ejemplo oficial, tras procesar las 10 conexiones más cortas, los tres mayores
 circuitos tienen tamaños `5`, `4` y `2`. El resultado es:
@@ -41,10 +39,9 @@ Con el input del proyecto, la respuesta de la parte 1 es:
 
 ## Parte 2
 
-Ahora hay que seguir conectando parejas, siempre en orden de cercania, hasta que
-todas las cajas queden dentro de un único circuito. El resultado pedido es el
-producto de las coordenadas `X` de las dos cajas de la conexión que consigue unirlo
-todo.
+Ahora se siguen conectando cajas hasta que todas formen un único circuito. La
+respuesta es el producto de las coordenadas `X` de las dos cajas de la conexión que
+lo consigue.
 
 Con el ejemplo oficial, la conexión final es entre `216,146,977` y `117,168,530`, y
 el resultado es:

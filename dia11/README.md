@@ -2,17 +2,15 @@
 
 ## Problema
 
-El problema ocurre en el reactor de la fábrica. La entrada describe una red dirigida
-de dispositivos:
+La entrada describe una red de dispositivos conectados:
 
 ```text
 you: bbb ccc
 bbb: ddd eee
 ```
 
-Cada línea indica un dispositivo y la lista de dispositivos a los que van sus
-salidas. Los datos fluyen solo hacia delante por esas conexiones. El objetivo de la
-parte 1 es contar cuántos caminos distintos llevan desde `you` hasta `out`.
+Cada línea indica un dispositivo y a qué otros dispositivos puede enviar la señal.
+El objetivo es contar caminos dentro de esa red.
 
 La entrada está en:
 
@@ -21,6 +19,8 @@ src/main/resources/input.txt
 ```
 
 ## Parte 1
+
+Hay que contar cuántos caminos distintos van desde `you` hasta `out`.
 
 Con el ejemplo oficial:
 
@@ -51,8 +51,8 @@ Con el input del proyecto, la respuesta de la parte 1 es:
 
 ## Parte 2
 
-Ahora hay que contar los caminos desde `svr` hasta `out`, pero solo aquellos que
-pasan por `dac` y por `fft`, en cualquier orden.
+Ahora se cuentan caminos desde `svr` hasta `out`, pero solo valen si pasan por `dac`
+y por `fft`, en cualquier orden.
 
 Con el ejemplo oficial de la parte 2, el resultado es:
 

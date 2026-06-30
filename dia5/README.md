@@ -2,16 +2,14 @@
 
 ## Problema
 
-El problema ocurre en la cafetería. Los Elfos tienen una base de datos del sistema de
-inventario con dos secciones:
+La entrada es una base de datos de ingredientes con dos partes:
 
 - una lista de rangos de IDs de ingredientes frescos;
 - una línea en blanco;
 - una lista de IDs de ingredientes disponibles.
 
-Cada rango es inclusivo. Por ejemplo, `3-5` indica que los IDs `3`, `4` y `5` son
-frescos. Los rangos pueden solaparse; un ingrediente es fresco si pertenece a
-cualquiera de los rangos.
+Un ID es fresco si aparece dentro de alguno de los rangos. Los rangos incluyen sus
+dos extremos, por ejemplo `3-5` incluye `3`, `4` y `5`.
 
 La entrada está en:
 
@@ -21,7 +19,7 @@ src/main/resources/input.txt
 
 ## Parte 1
 
-El objetivo es contar cuántos IDs disponibles son frescos.
+Hay que contar cuántos IDs de la lista de disponibles son frescos.
 
 Con el ejemplo oficial:
 
@@ -53,8 +51,8 @@ Con el input del proyecto, la respuesta de la parte 1 es:
 
 ## Parte 2
 
-En la segunda parte, la lista de IDs disponibles deja de importar. Ahora hay que
-contar cuántos IDs distintos quedan cubiertos por los rangos frescos.
+Ahora no se usa la lista de disponibles. Hay que contar cuántos IDs distintos están
+cubiertos por los rangos frescos.
 
 Con el ejemplo oficial, los rangos:
 

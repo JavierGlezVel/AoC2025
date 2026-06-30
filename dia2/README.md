@@ -2,9 +2,8 @@
 
 ## Problema
 
-El problema ocurre en la tienda de regalos del Polo Norte. La base de datos contiene
-rangos de IDs de producto, pero algunos IDs son inválidos porque siguen patrones
-repetitivos.
+La entrada contiene varios rangos de IDs de producto. Algunos IDs son inválidos
+porque están formados por dígitos repetidos.
 
 La entrada es una única línea con rangos separados por comas:
 
@@ -12,20 +11,12 @@ La entrada es una única línea con rangos separados por comas:
 11-22,95-115,998-1012
 ```
 
-Cada rango está formado por:
-
-- primer ID del rango;
-- guion `-`;
-- último ID del rango.
-
-El rango incluye ambos extremos. Por ejemplo, `11-22` incluye tanto `11` como `22`.
-
-Los IDs no tienen ceros a la izquierda. Por eso `0101` no se considera un ID válido.
+Cada rango incluye sus dos extremos. Por ejemplo, `11-22` incluye desde `11` hasta
+`22`.
 
 ## Parte 1
 
-En la primera parte, un ID es inválido si está formado por una secuencia de dígitos
-repetida exactamente dos veces.
+Un ID es inválido si está formado por un bloque repetido exactamente dos veces.
 
 Ejemplos:
 
@@ -33,8 +24,7 @@ Ejemplos:
 - `6464` es inválido porque es `64` repetido dos veces.
 - `123123` es inválido porque es `123` repetido dos veces.
 
-El objetivo es encontrar todos los IDs inválidos que aparecen dentro de los rangos de
-entrada y sumarlos.
+Hay que buscar esos IDs dentro de los rangos y sumarlos.
 
 Con el ejemplo oficial, la suma de la parte 1 es:
 
@@ -50,8 +40,7 @@ Con el input del proyecto, la respuesta de la parte 1 es:
 
 ## Parte 2
 
-En la segunda parte, la regla se amplía. Ahora un ID es inválido si está formado por
-una secuencia de dígitos repetida al menos dos veces.
+La regla se amplía: ahora el bloque puede repetirse dos o más veces.
 
 Ejemplos:
 
@@ -60,8 +49,7 @@ Ejemplos:
 - `1212121212` es inválido porque `12` se repite cinco veces.
 - `1111111` es inválido porque `1` se repite siete veces.
 
-Esta regla incluye todos los casos de la parte 1, pero añade IDs con tres o más
-repeticiones.
+Esto incluye los casos de la parte 1 y añade IDs con más repeticiones.
 
 Con el ejemplo oficial, la suma de la parte 2 es:
 

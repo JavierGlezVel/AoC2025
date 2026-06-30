@@ -2,15 +2,13 @@
 
 ## Problema
 
-El problema ocurre en el departamento de impresión. La entrada representa un mapa
-rectangular donde:
+La entrada es un mapa rectangular del departamento de impresión:
 
 - `@` indica un rollo de papel.
 - `.` indica un espacio vacío.
 
-Los forklifts solo pueden acceder a un rollo si hay menos de cuatro rollos de papel
-en sus ocho posiciones adyacentes. Las posiciones adyacentes incluyen horizontal,
-vertical y diagonal.
+Un rollo es accesible si tiene como mucho tres rollos alrededor. Alrededor significa
+las ocho posiciones vecinas: arriba, abajo, lados y diagonales.
 
 La entrada está en:
 
@@ -20,7 +18,7 @@ src/main/resources/input.txt
 
 ## Parte 1
 
-El objetivo es contar cuántos rollos de papel son accesibles.
+Hay que contar cuántos rollos son accesibles en el mapa inicial.
 
 Con el ejemplo oficial:
 
@@ -47,9 +45,9 @@ Con el input del proyecto, la respuesta de la parte 1 es:
 
 ## Parte 2
 
-En la segunda parte, cada rollo accesible puede retirarse. Al retirar un rollo, otros
-rollos pueden pasar a tener menos vecinos y volverse accesibles. El proceso se repite
-hasta que no queda ningún rollo accesible.
+Ahora los rollos accesibles se retiran. Al quitar uno, otros rollos pueden quedarse
+con menos vecinos y volverse accesibles también. El proceso continúa hasta que ya no
+se pueda retirar ninguno más.
 
 Con el ejemplo oficial, se pueden retirar `43` rollos en total.
 

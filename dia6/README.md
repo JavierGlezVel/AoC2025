@@ -2,14 +2,15 @@
 
 ## Problema
 
-El problema ocurre dentro de un compactador de basura. La entrada representa una hoja
-de ejercicios colocada en horizontal. Cada ejercicio ocupa varias columnas:
+La entrada es una hoja con varios ejercicios escritos en columnas. Cada ejercicio
+ocupa un bloque de columnas:
 
 - las filas superiores contienen los números del ejercicio, uno debajo de otro;
 - la última fila contiene la operación (`+` o `*`);
 - los ejercicios están separados por una columna completamente vacía.
 
-La alineación izquierda o derecha de los números dentro de cada ejercicio no importa.
+La separación por columnas vacías permite saber dónde empieza y termina cada
+ejercicio.
 
 La entrada debe estar en:
 
@@ -19,7 +20,7 @@ src/main/resources/input.txt
 
 ## Parte 1
 
-El objetivo es calcular el resultado de cada ejercicio y sumar todos esos resultados.
+Hay que resolver cada ejercicio y sumar todos los resultados.
 
 Con el ejemplo oficial:
 
@@ -53,9 +54,8 @@ Con el input del proyecto, la respuesta de la parte 1 es:
 
 ## Parte 2
 
-En la segunda parte, la hoja se interpreta como matemática de cefalópodos: los
-números se leen por columnas, de derecha a izquierda dentro de cada ejercicio. En
-cada columna, el dígito más significativo está arriba y el menos significativo abajo.
+Ahora los números se leen de otra forma: por columnas y de derecha a izquierda dentro
+de cada ejercicio. Después se resuelve cada ejercicio igual que antes.
 
 Con el mismo ejemplo oficial, los ejercicios pasan a ser:
 

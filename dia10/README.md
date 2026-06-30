@@ -2,8 +2,7 @@
 
 ## Problema
 
-El problema ocurre en una fábrica. La entrada contiene una máquina por línea. Cada
-línea tiene:
+La entrada contiene varias máquinas, una por línea. Cada máquina tiene:
 
 - un diagrama de luces entre corchetes, donde `.` significa apagada y `#` encendida;
 - uno o más botones entre paréntesis, indicando qué luces conmuta cada botón;
@@ -15,8 +14,7 @@ Un ejemplo de línea es:
 [.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}
 ```
 
-Todas las luces empiezan apagadas. El objetivo es calcular el menor número total de
-pulsaciones necesario para configurar todas las máquinas.
+El objetivo es calcular cuántas pulsaciones hacen falta como mínimo.
 
 La entrada está en:
 
@@ -26,9 +24,8 @@ src/main/resources/input.txt
 
 ## Parte 1
 
-Como los botones solo conmutan luces, pulsar dos veces el mismo botón deja las luces
-igual que antes y solo añade dos pulsaciones. Por eso, para minimizar, cada botón se
-considera como usado o no usado.
+Las luces empiezan apagadas. Cada botón cambia algunas luces de apagadas a encendidas
+o al revés. Hay que llegar al patrón objetivo con el menor número de pulsaciones.
 
 Con el ejemplo oficial:
 
@@ -52,9 +49,9 @@ Con el input del proyecto, la respuesta de la parte 1 es:
 
 ## Parte 2
 
-En la segunda parte se ignora el diagrama de luces y se usan los requisitos de
-joltage. Cada botón incrementa en `1` todos los contadores que aparecen en su
-esquema, y puede pulsarse cualquier número de veces.
+Ahora se ignoran las luces y se usan los requisitos de joltage. Cada botón suma `1`
+a ciertos contadores, y puede pulsarse varias veces. Hay que alcanzar los valores
+pedidos con el menor total de pulsaciones.
 
 Con el ejemplo oficial, el resultado es:
 

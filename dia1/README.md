@@ -2,16 +2,16 @@
 
 ## Problema
 
-El problema plantea una caja fuerte con un dial circular numerado del `0` al `99`.
-El dial empieza en la posición `50` y recibe una lista de rotaciones, una por línea.
-Cada rotación empieza por:
+Hay una caja fuerte con un dial circular que va del `0` al `99`. El dial empieza en
+`50` y el input indica cómo girarlo.
+
+Cada línea tiene una dirección y un número de clicks:
 
 - `L`: giro hacia la izquierda, números menores.
 - `R`: giro hacia la derecha, números mayores.
 
-Después aparece el número de clicks que debe avanzar el dial. Como el dial es
-circular, al girar a la izquierda desde `0` se pasa a `99`, y al girar a la derecha
-desde `99` se pasa a `0`.
+Como el dial es circular, después del `99` vuelve al `0`, y antes del `0` está el
+`99`.
 
 La entrada está en:
 
@@ -21,77 +21,18 @@ src/main/resources/input.txt
 
 ## Parte 1
 
-En la primera parte se pide contar cuántas veces el dial queda apuntando a `0`
-después de completar una rotación.
-
-La solución modela el dial como un objeto con estado interno:
-
-```java
-private int position = 50;
-```
-
-Cada rotación actualiza la posición usando aritmética modular:
-
-```java
-position = (position - steps % 100 + 100) % 100;
-position = (position + steps) % 100;
-```
-
-Después de cada rotación, `PasswordCalculatorPart1` comprueba si la posición final
-es `0` y, en ese caso, incrementa el contador.
+Hay que seguir todas las rotaciones y contar cuántas veces el dial termina en `0`
+justo al acabar una rotación.
 
 Con el ejemplo del enunciado, la parte 1 devuelve `3`.
 
 ## Parte 2
 
-En la segunda parte aparece un nuevo documento de seguridad. El método
-`0x434C49434B` cambia la forma de calcular la contraseña: ahora hay que contar el
-número de veces que cualquier click hace que el dial apunte a `0`, tanto si ocurre al
-final de una rotación como si ocurre durante la rotación.
+Ahora no basta con mirar dónde acaba cada rotación. Hay que contar todas las veces
+que el dial pasa por `0`, aunque sea en mitad de una rotación.
 
-Con las mismas rotaciones del ejemplo de la parte 1:
-
-```text
-L68
-L30
-R48
-L5
-R60
-L55
-L1
-L99
-R14
-L82
-```
-
-El dial termina en `0` tres veces, como en la parte 1. Además, durante algunas
-rotaciones pasa por `0` otras tres veces:
-
-- `L68`: pasa por `0` una vez durante la rotación.
-- `R60`: pasa por `0` una vez durante la rotación.
-- `L82`: pasa por `0` una vez durante la rotación.
-
-Por tanto, el resultado del ejemplo para la parte 2 es `6`.
-
-`PasswordCalculatorPart2` cuenta los cruces por `0` antes de aplicar la rotación al
-dial. Para evitar simular click a click, calcula matemáticamente cuántos ceros se
-cruzan según:
-
-- posición inicial del dial;
-- dirección de la rotación;
-- número total de clicks.
-
-Ejemplo: desde `50`, una rotación `R1000` pasa por `0` diez veces antes de volver a
-`50`. Esto coincide con la advertencia del enunciado: no basta con comprobar la
-posición final de la rotación.
-
-Otro ejemplo más pequeño: desde `50`, una rotación `R250` pasa por `0` tres veces:
-
-- al llegar a `0` por primera vez;
-- tras una vuelta completa;
-- tras otra vuelta completa.
-
-Por eso el test de esa rotación espera `3`.
+Por ejemplo, una rotación larga puede dar varias vueltas completas y pasar varias
+veces por `0`. Con el ejemplo del enunciado, la parte 2 devuelve `6`.
 
 
 ## Diseño de clases
