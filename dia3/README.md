@@ -85,24 +85,24 @@ Con el input del proyecto, la respuesta de la parte 2 es:
 
 ## Enfoque de la solución
 
-La parte 1 podría resolverse probando todos los pares posibles de baterías, pero la
-parte 2 generaliza el problema: ahora hay que escoger una subsecuencia de 12 dígitos
-que forme el mayor número posible.
+La solución usa la misma idea para las dos partes: escoger varios dígitos de una
+línea para formar el número más grande posible.
 
-Por eso `MaximumJoltageCalculator` recibe cuántas baterías debe encender:
-
-En vez de tener una solución distinta para cada parte, se usa una misma clase y se le
-indica cuántos dígitos debe escoger. Para la parte 1 se le pide `2`; para la parte 2
-se le pide `12`.
+La diferencia está solo en cuántos dígitos hay que escoger. En la parte 1 se escogen
+`2`; en la parte 2 se escogen `12`. Por eso `MaximumJoltageCalculator` recibe ese
+número como parámetro:
 
 ```java
 new MaximumJoltageCalculator(2)
 new MaximumJoltageCalculator(12)
 ```
 
-El algoritmo elige los dígitos de izquierda a derecha. Para cada posición del
-resultado, busca el mayor dígito posible dentro del tramo que todavía deja suficientes
-baterías a la derecha para completar el número:
+El algoritmo va construyendo el número de izquierda a derecha. En cada paso busca el
+mejor dígito que puede escoger sin quedarse sin dígitos para completar el resultado.
+
+Por ejemplo, si todavía faltan varias cifras por elegir, no puede escoger un dígito
+que esté demasiado al final de la línea. Tiene que dejar sitio para las cifras que
+faltan.
 
 ```java
 int searchEnd = ratings.length() - (batteriesToTurnOn - selected);
@@ -115,11 +115,13 @@ for (int currentIndex = searchStart; currentIndex <= searchEnd; currentIndex++) 
 }
 ```
 
-Después añade ese dígito al resultado y continúa buscando a partir de la posición
-siguiente. Así se respeta el orden original de las baterías.
+Cuando encuentra el mejor dígito para esa posición, lo añade al resultado y sigue
+buscando desde la posición siguiente. Así nunca cambia el orden original de las
+baterías.
 
 `TotalOutputJoltageCalculator` suma el resultado de aplicar un `JoltageCalculator` a
-cada banco:
+cada banco. Es decir, calcula el mejor valor de cada línea y luego suma todos esos
+valores:
 
 ```java
 return banks.stream()

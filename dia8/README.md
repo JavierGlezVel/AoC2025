@@ -67,21 +67,21 @@ Con el input del proyecto, la respuesta de la parte 2 es:
 
 ## Enfoque de la solución
 
-`ConnectionCandidateGenerator` genera todas las parejas posibles de cajas y calcula
-su distancia al cuadrado:
+La solución empieza generando todas las parejas posibles de cajas. Para cada pareja
+calcula qué tan lejos están.
 
-Se generan todas las parejas porque cualquier caja podría acabar conectándose con
-cualquier otra si está entre las más cercanas.
+Se usan todas las parejas porque una conexión puede darse entre cualquier par de
+cajas si están entre las más cercanas.
 
 ```java
 long distanceSquared = junctionBoxes.get(first).distanceSquaredTo(junctionBoxes.get(second));
 ```
 
-No hace falta calcular la raíz cuadrada porque comparar distancias al cuadrado
-mantiene el mismo orden y evita trabajar con números decimales.
+La distancia se guarda al cuadrado. No hace falta calcular la raíz cuadrada, porque
+para ordenar de menor a mayor da el mismo resultado y se evita trabajar con decimales.
 
-Después ordena las parejas por distancia. Las dos partes reutilizan esa lista
-ordenada, pero aplican reglas distintas:
+Después se ordenan las parejas por distancia. A partir de ahí, las dos partes usan
+esa misma lista ordenada:
 
 - `CircuitSizeProductCalculatorPart1` procesa las primeras 1000 conexiones y
   multiplica los tres tamaños de circuito más grandes.
@@ -89,9 +89,12 @@ ordenada, pero aplican reglas distintas:
   `CircuitNetwork` queda reducido a un único circuito y devuelve el producto de las
   coordenadas `X` de esa última conexión necesaria.
 
-`CircuitNetwork` implementa unión-búsqueda. Esta estructura mantiene para cada caja
-su representante de circuito, el tamaño de cada componente conectada y cuántos
-circuitos quedan activos.
+`CircuitNetwork` se encarga de recordar qué cajas están conectadas entre sí. Cuando
+se conecta una pareja de cajas de circuitos distintos, esos dos circuitos pasan a ser
+uno solo.
+
+La ventaja es que no hay que reconstruir toda la red cada vez. Solo se pregunta si
+dos cajas ya estaban juntas o si al conectarlas se han unido dos grupos distintos.
 
 
 ## Uso de Streams

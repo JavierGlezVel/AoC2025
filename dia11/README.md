@@ -77,28 +77,32 @@ Con el input del proyecto, la respuesta de la parte 2 es:
 
 ## Enfoque de la solución
 
-`DeviceNetworkParser` transforma cada línea en una entrada del grafo dirigido. El
-dominio guarda un mapa desde cada dispositivo hasta sus salidas.
+Primero, `DeviceNetworkParser` convierte cada línea del input en conexiones entre
+dispositivos. El resultado es una red donde cada dispositivo sabe a qué dispositivos
+puede enviar la señal.
 
 Después del parseo, resolver el problema consiste en recorrer ese grafo y sumar los
 caminos que llegan al nodo final.
 
-`ReactorPathCounterPart1` cuenta caminos con una búsqueda en profundidad desde
-`you`. Para evitar recalcular subgrafos compartidos, memoiza el número de caminos
-desde cada dispositivo:
+Para la parte 1, `ReactorPathCounterPart1` empieza en `you` y sigue todas las salidas
+posibles. Cada vez que llega a `out`, ha encontrado un camino válido.
+
+Para no repetir trabajo, guarda cuántos caminos salen desde cada dispositivo. Así, si
+vuelve a llegar al mismo dispositivo por otro camino, reutiliza el resultado:
 
 ```java
 memoizedPaths.put(device, totalPaths);
 ```
 
-Cuando la búsqueda llega a `out`, devuelve `1`, porque se ha encontrado un camino
-completo. Si un dispositivo no tiene salidas y no es `out`, devuelve `0`. Se usa
-`BigInteger` para no limitar artificialmente el número de caminos.
+Cuando la búsqueda llega a `out`, devuelve `1`. Si llega a un dispositivo sin salida
+que no es `out`, devuelve `0`.
 
-`ReactorRequiredDevicePathCounterPart2` usa la misma idea, pero añade estado a la
-búsqueda: dispositivo actual, si ya se ha pasado por `dac` y si ya se ha pasado por
-`fft`. Al llegar a `out`, solo cuenta el camino si ambos dispositivos requeridos ya
-han sido visitados.
+Para la parte 2 se usa la misma forma de recorrer la red, pero hay que recordar más
+información. No basta con saber el dispositivo actual: también hay que saber si el
+camino ya pasó por `dac` y por `fft`.
+
+Al llegar a `out`, el camino solo cuenta si esos dos dispositivos ya se visitaron. Se
+usa `BigInteger` porque el número de caminos puede ser muy grande.
 
 
 ## Uso de Streams

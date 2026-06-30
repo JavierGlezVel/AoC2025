@@ -76,28 +76,35 @@ Con el input del proyecto, la respuesta de la parte 2 es:
 
 ## Enfoque de la solución
 
-`FactoryMachineParser` convierte el diagrama objetivo y cada botón en máscaras de
-bits. También conserva los requisitos de joltage como una lista de enteros.
+Primero, `FactoryMachineParser` lee cada línea y la convierte en una `FactoryMachine`.
+Esa clase guarda tres cosas: el objetivo de luces, los botones disponibles y los
+requisitos de joltage.
 
-Las máscaras permiten representar muchas luces con un solo número. Así es rápido
-combinar botones y comparar si se ha llegado al objetivo.
+Para la parte 1, las luces y los botones se guardan como máscaras de bits. Dicho de
+forma simple, una máscara es un número que representa qué luces están encendidas.
+Esto permite combinar botones rápido.
 
 `MinimumButtonPressesCalculatorPart1` prueba todos los subconjuntos de botones de
-cada máquina. Para cada subconjunto aplica XOR con las máscaras de los botones:
+cada máquina. Cada subconjunto significa: estos botones se pulsan una vez y estos no.
+Para combinar el efecto de los botones usa XOR:
 
 ```java
 currentMask ^= machine.buttonMasks().get(button);
 ```
 
-Si la máscara resultante coincide con la máscara objetivo, se guarda el menor número
-de botones usados.
+Si al final las luces coinciden con el objetivo, se guarda cuántos botones se han
+usado. La solución se queda con la opción que usa menos botones.
 
-`MinimumJoltageButtonPressesCalculatorPart2` modela cada máquina como un sistema de
-ecuaciones lineales: cada variable es el número de veces que se pulsa un botón, y
-cada ecuación representa un contador de joltage. Reduce el sistema con eliminación
-gaussiana exacta usando fracciones, y enumera solo las variables libres. En este
-input, cada máquina deja como máximo tres variables libres, así que la búsqueda es
-exacta y acotada.
+Para la parte 2, los botones ya no solo se pulsan una vez: pueden pulsarse muchas
+veces. Cada botón suma `1` a algunos contadores de joltage.
+
+La solución traduce eso a cuentas matemáticas: cuántas veces pulso cada botón para
+llegar a los valores pedidos. Después busca una combinación válida y se queda con la
+que usa menos pulsaciones.
+
+Aunque internamente se usa álgebra con fracciones para hacerlo exacto, la idea del
+problema es sencilla: encontrar cuántas veces hay que pulsar cada botón para que
+todos los contadores lleguen justo al valor que pide la máquina.
 
 
 ## Uso de Streams

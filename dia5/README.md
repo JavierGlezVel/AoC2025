@@ -88,15 +88,15 @@ Con el input del proyecto, la respuesta de la parte 2 es:
 
 ## Enfoque de la solución
 
-`InventoryDatabaseParser` separa la entrada en dos secciones usando la línea en
-blanco. Antes de esa línea parsea rangos; después de esa línea parsea IDs
+Primero, `InventoryDatabaseParser` separa el input en dos partes. Antes de la línea
+en blanco están los rangos frescos. Después de la línea en blanco están los IDs
 disponibles.
 
 De esta forma, el resto del programa no trabaja con texto crudo, sino con un objeto
 `InventoryDatabase` que ya contiene los rangos y los IDs preparados.
 
-`FreshIngredientCounterPart1` recorre los IDs disponibles y comprueba si cada uno
-pertenece a algún rango fresco:
+Para la parte 1, `FreshIngredientCounterPart1` recorre los IDs disponibles uno por
+uno. Para cada ID, mira si está dentro de alguno de los rangos frescos:
 
 ```java
 for (FreshIngredientIdRange range : database.freshRanges()) {
@@ -106,12 +106,14 @@ for (FreshIngredientIdRange range : database.freshRanges()) {
 }
 ```
 
-Como la parte 1 solo pide clasificar los IDs disponibles, no hace falta expandir los
-rangos ni generar todos los IDs frescos. Esto evita trabajar con intervalos enormes.
+Si el ID cae en algún rango, se cuenta como fresco. No hace falta crear todos los IDs
+posibles de cada rango, porque algunos rangos pueden ser enormes.
 
-Para la parte 2 tampoco se expanden los rangos. `FreshIngredientIdCoverageCounterPart2`
-ordena los rangos por inicio, fusiona los que se solapan o se tocan, y suma la
-longitud inclusiva de los intervalos resultantes:
+Para la parte 2 tampoco se crean todos los IDs. En su lugar, los rangos se ordenan
+por su inicio. Luego se van uniendo los que se solapan o se tocan.
+
+Por ejemplo, si aparecen los rangos `10-14` y `12-18`, se pueden tratar como un solo
+rango `10-18`.
 
 ```java
 if (currentRange.overlapsOrTouches(range)) {
@@ -122,7 +124,8 @@ if (currentRange.overlapsOrTouches(range)) {
 }
 ```
 
-Así, un ID cubierto por varios rangos se cuenta una sola vez.
+Al final se suma el tamaño de los rangos ya unidos. Así, un ID cubierto por varios
+rangos se cuenta una sola vez.
 
 
 ## Uso de Streams

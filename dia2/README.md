@@ -74,21 +74,21 @@ Con el input del proyecto, la respuesta de la parte 2 es:
 
 ## Enfoque de la solución
 
-Una solución directa sería recorrer todos los números de todos los rangos y comprobar
-si cada número cumple el patrón. Esa opción es sencilla, pero no escala bien cuando
-los rangos contienen millones o miles de millones de IDs.
+La idea principal es no recorrer todos los números de los rangos. Algunos rangos son
+muy grandes, así que revisar número por número sería demasiado lento.
 
-La solución implementada hace lo contrario: genera solo los IDs que pueden ser
-inválidos y después comprueba si están dentro de alguno de los rangos.
+En vez de eso, la solución genera primero los números que tienen pinta de ser
+inválidos. Después comprueba si alguno de esos números aparece dentro de los rangos
+del input.
 
-Así se evita revisar números que nunca podrían ser respuesta. Por ejemplo, para la
-parte 1 se generan directamente valores como `11`, `22`, `123123` o `6464`, y luego
-solo se comprueba si caen dentro de los rangos del input.
+Por ejemplo, para la parte 1 se generan directamente números como `11`, `22`,
+`123123` o `6464`. Luego solo hay que mirar si esos candidatos están dentro de algún
+rango.
 
 ### Generación de candidatos para la parte 1
 
-`RepeatedTwiceProductIdGenerator` genera candidatos repitiendo un prefijo
-exactamente dos veces:
+Para la parte 1, `RepeatedTwiceProductIdGenerator` toma un bloque de dígitos y lo
+duplica:
 
 ```text
 1   -> 11
@@ -97,14 +97,14 @@ exactamente dos veces:
 123 -> 123123
 ```
 
-Después, `InvalidProductIdSumCalculatorPart1` usa esos candidatos para calcular la
-suma de los que aparecen en los rangos.
+Después, `InvalidProductIdSumCalculatorPart1` revisa cuáles de esos candidatos están
+en los rangos y suma solo esos.
 
 ### Generación de candidatos para la parte 2
 
-`RepeatedAtLeastTwiceProductIdGenerator` generaliza la idea anterior. Toma un bloque
-de dígitos y lo repite dos, tres, cuatro o más veces mientras el número generado no
-supere el mayor ID de la entrada.
+Para la parte 2 se usa la misma idea, pero el bloque puede repetirse más de dos
+veces. `RepeatedAtLeastTwiceProductIdGenerator` va creando números repetidos hasta
+superar el mayor ID del input.
 
 Por ejemplo, con el bloque `12` se generan:
 
@@ -114,10 +114,9 @@ Por ejemplo, con el bloque `12` se generan:
 12121212
 ```
 
-Los candidatos se guardan en un `Set` para evitar duplicados. Esto es necesario
-porque un mismo número puede cumplir la regla de más de una forma. Por ejemplo,
-`1111` puede verse como `11` repetido dos veces o como `1` repetido cuatro veces,
-pero solo debe sumarse una vez.
+Los candidatos se guardan en un `Set` para no repetir números. Esto importa porque
+un mismo ID puede verse de más de una manera. Por ejemplo, `1111` puede ser `11`
+repetido dos veces o `1` repetido cuatro veces, pero debe sumarse una sola vez.
 
 
 ## Uso de Streams

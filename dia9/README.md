@@ -85,37 +85,35 @@ Con el input del proyecto, la respuesta de la parte 2 es:
 
 ### Parte 1
 
-`LargestRectangleAreaCalculatorPart1` recorre todas las parejas posibles de baldosas
-rojas. Para cada pareja delega el cálculo del área en `RedTile`:
+En la parte 1, `LargestRectangleAreaCalculatorPart1` prueba todas las parejas de
+baldosas rojas. Cada pareja puede ser dos esquinas opuestas de un rectángulo.
 
-Es una búsqueda directa: si hay varias baldosas rojas, se prueba cada pareja una vez
-y se guarda el área más grande encontrada.
+Para cada pareja se calcula el área. Si esa área es mayor que la mejor encontrada
+hasta ese momento, se guarda como nueva mejor respuesta.
 
 ```java
 long area = redTiles.get(first).rectangleAreaWith(redTiles.get(second));
 ```
 
-El número de puntos del input permite una solución directa `O(n^2)`, que es simple y
-exacta para esta parte.
+Es una solución directa y fácil de seguir: probar parejas, calcular áreas y quedarse
+con la mayor.
 
 ### Parte 2
 
-`LargestContainedRectangleAreaCalculatorPart2` también recorre parejas de baldosas
-rojas, pero solo acepta un rectángulo si `RedGreenTileArea` confirma que todo el
-rectángulo queda dentro del bucle.
+En la parte 2 se vuelve a probar cada pareja de baldosas rojas, pero ahora hay una
+condición extra: el rectángulo completo tiene que quedar dentro de la zona válida.
 
-Para evitar enumerar todas las baldosas del rectángulo, `RedGreenTileArea` comprime
-el polígono por filas:
+`RedGreenTileArea` se encarga de saber qué partes de la cuadrícula están dentro de
+esa zona. En vez de mirar casilla por casilla en coordenadas enormes, guarda tramos
+de columnas válidas por filas.
 
-- en filas que coinciden con vértices rojos, calcula la unión de borde e interior
-  adyacente;
-- en tramos de filas entre dos coordenadas `Y` consecutivas, calcula una sola vez
-  los intervalos de `X` que están dentro del bucle;
-- un rectángulo es válido si su intervalo horizontal cabe completo en todos los
-  tramos de filas que ocupa.
+La idea es esta:
 
-Esta técnica mantiene el cálculo exacto sin depender del tamaño real de las
-coordenadas.
+- para cada tramo de filas, se sabe qué columnas pertenecen a la zona;
+- para validar un rectángulo, se comprueba que su ancho cabe dentro de esos tramos;
+- si cabe en todos los tramos que ocupa, el rectángulo es válido.
+
+Así se comprueba la zona completa sin tener que crear una cuadrícula gigante.
 
 
 ## Uso de Streams

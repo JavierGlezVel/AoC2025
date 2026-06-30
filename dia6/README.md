@@ -90,25 +90,33 @@ Con el input del proyecto, la respuesta de la parte 2 es:
 
 ## Enfoque de la solución
 
-`MathWorksheetParser` normaliza todas las líneas a la misma anchura y recorre la hoja
-por columnas. Cuando encuentra una columna completamente vacía, la usa como
-separador entre ejercicios. Para cada bloque de columnas no vacío:
+`MathWorksheetParser` trata la hoja como una cuadrícula de caracteres. Para poder
+leerla bien, primero hace que todas las líneas tengan la misma longitud.
 
 Normalizar significa rellenar con espacios las líneas más cortas para poder leer
 cualquier columna sin salirse. Así todas las filas tienen la misma longitud.
+
+Después recorre la hoja por columnas. Cuando encuentra una columna completamente
+vacía, entiende que ahí termina un ejercicio y empieza otro.
+
+Para cada bloque de columnas no vacío:
 
 - lee los números de las filas superiores;
 - lee la operación de la última fila;
 - crea un `MathProblem` con esos datos.
 
-Para la parte 2, `parseRightToLeft` reutiliza esos mismos bloques, pero los procesa
-desde el bloque de la derecha hasta el de la izquierda. Dentro de cada bloque recorre
-las columnas de derecha a izquierda y forma cada número con los dígitos que aparecen
-de arriba abajo en esa columna.
+Para la parte 1, los números se leen tal como aparecen en cada bloque. Para la parte
+2, `parseRightToLeft` usa los mismos bloques, pero lee las columnas desde la derecha
+hacia la izquierda.
+
+En la parte 2, cada columna forma un número usando los dígitos de arriba abajo. Así
+la hoja se interpreta de otra manera, pero se reutiliza la misma idea de separar
+ejercicios por columnas vacías.
 
 `WorksheetGrandTotalCalculatorPart1` y `WorksheetGrandTotalCalculatorPart2` calculan
-cada problema delegando en `MathOperation`, y suman los resultados con `BigInteger`
-para evitar desbordamientos cuando un ejercicio contiene multiplicaciones grandes.
+cada problema usando `MathOperation`. Esa clase sabe si debe sumar o multiplicar.
+Los resultados se guardan en `BigInteger` porque algunas multiplicaciones pueden dar
+números muy grandes.
 
 
 ## Uso de Streams

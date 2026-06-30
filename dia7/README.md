@@ -86,8 +86,8 @@ Con el input del proyecto, la respuesta de la parte 2 es:
 
 ### Parte 1
 
-`BeamSplitCounterPart1` simula el avance del haz fila a fila. En cada fila mantiene
-un conjunto de columnas activas:
+En la parte 1, `BeamSplitCounterPart1` baja por el mapa fila a fila. No guarda cada
+haz como un objeto separado; solo guarda en qué columnas hay un haz activo.
 
 Ese conjunto indica en qué columnas hay un haz en la fila actual. Si dos haces llegan
 a la misma columna, el conjunto evita contarlos dos veces en la parte 1.
@@ -96,26 +96,25 @@ a la misma columna, el conjunto evita contarlos dos veces en la parte 1.
 Set<Integer> activeColumns = Set.of(start.column());
 ```
 
-Para cada columna activa:
+En cada fila se mira cada columna activa:
 
 - si la celda contiene `^`, se suma una división y se activan las columnas izquierda
   y derecha para la siguiente fila;
 - si la celda contiene `.`, la misma columna sigue activa en la siguiente fila.
 
-Se usa un `Set` porque dos divisores pueden emitir haces hacia la misma columna. En
-ese caso, los haces se fusionan y solo hace falta procesar esa columna una vez en la
-siguiente fila.
+Se usa un `Set` porque en esta parte dos haces que llegan al mismo sitio se juntan.
+Si una columna ya está activa, no hace falta añadirla otra vez.
 
 ### Parte 2
 
-`TimelineCounterPart2` usa la misma idea de recorrer el colector fila a fila, pero
-mantiene multiplicidad de líneas temporales con un mapa:
+En la parte 2 se recorre el mapa igual, pero ahora sí importa cuántos caminos llegan
+a cada columna. Por eso `TimelineCounterPart2` usa un mapa:
 
 ```java
 Map<Integer, BigInteger> activeTimelines = Map.of(start.column(), BigInteger.ONE);
 ```
 
-La clave es la columna activa y el valor es cuántas líneas temporales llegan a esa
+La clave del mapa es la columna. El valor es cuántas líneas temporales llegan a esa
 columna. Para cada entrada del mapa:
 
 - si la celda contiene `^`, cada línea temporal se divide en dos y se acumula en las
@@ -124,9 +123,8 @@ columna. Para cada entrada del mapa:
 - si una rama sale lateralmente del diagrama, esa línea temporal se considera
   completada.
 
-Se usa `BigInteger` porque el número de líneas temporales crece de forma
-exponencial con los divisores alcanzados y puede superar el rango de tipos enteros
-pequeños.
+Se usa `BigInteger` porque el número de líneas temporales puede crecer muchísimo. No
+conviene limitarlo a un tipo entero pequeño.
 
 
 ## Uso de Streams

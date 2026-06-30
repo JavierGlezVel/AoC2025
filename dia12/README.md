@@ -49,24 +49,28 @@ Con el input del proyecto, la respuesta de la parte 1 es:
 
 ## Enfoque de la solución
 
-`TreeFarmParser` separa la entrada en dos partes: primero parsea las formas de los
-regalos y después las regiones. Cada forma se convierte en una lista de celdas
-ocupadas.
+Primero, `TreeFarmParser` separa el input en dos partes. Arriba están las formas de
+los regalos. Abajo están las regiones donde hay que intentar colocarlos.
 
-Así, una figura deja de ser texto con `#` y `.` y pasa a ser una lista de posiciones
-que realmente ocupan espacio.
+Cada forma se convierte en una lista de celdas ocupadas. Así, una figura deja de ser
+texto con `#` y `.` y pasa a ser algo más fácil de comprobar: una lista de posiciones
+que ocupan espacio.
 
-`FittingRegionCounterPart1` aplica dos niveles de decisión:
+Después, `FittingRegionCounterPart1` revisa cada región. La pregunta para cada una
+es: ¿caben todos los regalos que pide esta región?
+
+La solución lo comprueba en varios pasos:
 
 - si el área total de los regalos supera el área de la región, la región no puede
   servir;
-- para regiones pequeñas, usa un solver exacto de colocación con todas las
-  rotaciones y reflexiones de cada forma;
-- para las regiones grandes del input, donde todas tienen anchura y altura muy por
-  encima de las formas de 3x3, la restricción efectiva es el área total disponible.
+- si la región es pequeña, prueba colocaciones reales de las piezas, usando también
+  sus giros y reflejos;
+- si la región es grande, en este input basta con comprobar que hay área suficiente,
+  porque las piezas son pequeñas frente al tamaño de la región.
 
-El solver exacto se usa en los tests del ejemplo oficial. Esto evita aceptar casos
-pequeños que tienen área suficiente pero no admiten una colocación real.
+El solver exacto se usa especialmente para los casos pequeños, como los del ejemplo.
+Esto evita decir que una región sirve solo porque tiene área suficiente, cuando en
+realidad las piezas podrían no encajar por la forma.
 
 
 ## Uso de Streams

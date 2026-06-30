@@ -68,11 +68,12 @@ Con el input del proyecto, la respuesta de la parte 2 es:
 
 ## Enfoque de la solución
 
-Para la parte 1, la solución recorre todas las posiciones del mapa. Cuando encuentra
-un rollo (`@`), cuenta cuántos rollos hay alrededor en las ocho posiciones vecinas.
+Para la parte 1, la solución mira el mapa casilla por casilla. Cuando encuentra un
+rollo (`@`), revisa las ocho casillas que tiene alrededor.
 
-Es una comprobación local: para decidir si un rollo cuenta, no hace falta mirar todo
-el mapa, solo sus vecinos inmediatos.
+Si alrededor tiene tres rollos o menos, ese rollo se considera accesible y se suma al
+contador. No hace falta mirar todo el mapa para decidir cada rollo: solo importan sus
+vecinos inmediatos.
 
 Un rollo es accesible si cumple:
 
@@ -82,23 +83,26 @@ map.isPaperRollAt(position)
 ```
 
 El conteo de vecinos está encapsulado en `PaperRollMap`, que comprueba también los
-límites del mapa para no acceder fuera de la cuadrícula.
+límites del mapa para no acceder fuera de la cuadrícula. Así las calculadoras no
+tienen que preocuparse por si una posición está en una esquina o en un borde.
 
-Para la parte 2, `RemovablePaperRollCounterPart2` mantiene:
+Para la parte 2, la solución necesita recordar cómo va cambiando el mapa al retirar
+rollos. Para eso `RemovablePaperRollCounterPart2` mantiene:
 
 - una matriz con los rollos que siguen presentes;
 - una matriz con el número de vecinos de cada rollo;
 - una cola con los rollos que ya son accesibles.
 
-Cuando se retira un rollo, solo pueden cambiar sus vecinos. Por eso no hace falta
-recalcular todo el mapa en cada ronda: se decrementa el contador de vecinos de los
-rollos adyacentes y, si alguno pasa a ser accesible, se añade a la cola.
+La cola funciona como una lista de trabajo: guarda los rollos que ya se pueden
+retirar. Se saca uno de la cola, se retira, y después se revisan solo sus vecinos.
 
-La cola sirve para guardar los rollos que están pendientes de retirar. Así la
-solución avanza solo por las posiciones que han cambiado o que pueden cambiar.
+Esto es suficiente porque al retirar un rollo solo cambian las casillas de alrededor.
+No hace falta volver a contar todo el mapa desde cero. Si algún vecino pasa a tener
+tres rollos o menos alrededor, se mete en la cola para retirarlo más adelante.
 
-Esta solución aprovecha que el proceso es monotónico: retirar rollos nunca aumenta
-el número de vecinos de otro rollo.
+La idea sencilla es: retirar un rollo nunca hace que otro tenga más vecinos, solo
+puede hacer que tenga menos. Por eso el proceso avanza hasta que ya no queda ningún
+rollo accesible.
 
 
 ## Diseño de clases
