@@ -319,6 +319,83 @@ Contiene los detalles externos al dominio.
 - `WorksheetSource`: interfaz para obtener las líneas de entrada.
 - `FileWorksheetSource`: implementación que lee la hoja desde un fichero.
 
+## Clases principales
+
+### `Main` - `dia6/src/main/java/Main.java`
+
+1. Resuelve la ruta del input.
+2. Crea `FileWorksheetSource` y `TrashCompactorSolver`.
+3. Imprime el total de cada parte.
+
+### `TrashCompactorSolver` - `dia6/src/main/java/application/TrashCompactorSolver.java`
+
+1. Lee las líneas de la hoja con `WorksheetSource`.
+2. Usa `MathWorksheetParser` para obtener problemas matemáticos.
+3. Ejecuta la calculadora de la parte correspondiente.
+
+### `MathWorksheetParser` - `dia6/src/main/java/application/MathWorksheetParser.java`
+
+1. Normaliza el ancho de las líneas.
+2. Detecta bloques de columnas que forman problemas.
+3. Parsea números y operación en orden horizontal o vertical según la parte.
+
+### `MathOperation` - `dia6/src/main/java/domain/common/MathOperation.java`
+
+1. Representa las operaciones permitidas (`+` y `*`).
+2. Convierte símbolos de entrada en operaciones.
+3. Aplica la operación a una lista de números.
+
+### `MathProblem` - `dia6/src/main/java/domain/common/MathProblem.java`
+
+1. Agrupa los números de un problema y su operación.
+2. Valida que haya al menos un número.
+3. Copia la lista de números para mantener el objeto estable.
+
+### `WorksheetGrandTotalCalculatorPart1` - `dia6/src/main/java/domain/part1/WorksheetGrandTotalCalculatorPart1.java`
+
+1. Recibe los problemas parseados de izquierda a derecha.
+2. Aplica la operación de cada problema.
+3. Suma todos los resultados en un `BigInteger`.
+
+### `WorksheetGrandTotalCalculatorPart2` - `dia6/src/main/java/domain/part2/WorksheetGrandTotalCalculatorPart2.java`
+
+1. Recibe los problemas parseados de derecha a izquierda.
+2. Aplica la misma lógica de operación que la parte 1.
+3. Suma el total final de la hoja.
+
+### `WorksheetSource` - `dia6/src/main/java/infrastructure/WorksheetSource.java`
+
+1. Define cómo obtener las líneas de la hoja.
+2. Aísla el solver de la fuente concreta.
+
+### `FileWorksheetSource` - `dia6/src/main/java/infrastructure/FileWorksheetSource.java`
+
+1. Guarda la ruta del fichero.
+2. Lee todas las líneas.
+3. Implementa `WorksheetSource`.
+
+## Flujo del programa
+
+1. `Main` crea `FileWorksheetSource`.
+2. `TrashCompactorSolver` lee la hoja de operaciones.
+3. En la parte 1, `MathWorksheetParser.parse` divide la hoja en problemas por rangos de columnas.
+4. En la parte 2, `parseRightToLeft` interpreta los problemas desde la derecha hacia la izquierda.
+5. Cada problema queda representado como `MathProblem`, con una lista de números y una `MathOperation`.
+6. La calculadora aplica la operación de cada problema y suma todos los resultados con `BigInteger`.
+
+```java
+var problems = parser.parseRightToLeft(source.getLines());
+return new WorksheetGrandTotalCalculatorPart2().calculate(problems);
+```
+
+La suma final de problemas se expresa como stream: cada problema se evalúa y luego se acumula en un total.
+
+```java
+return problems.stream()
+        .map(problem -> problem.operation().apply(problem.numbers()))
+        .reduce(BigInteger.ZERO, BigInteger::add);
+```
+
 ## Fundamentos de diseño aplicados
 
 ### Alta Cohesión

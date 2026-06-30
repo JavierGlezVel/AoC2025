@@ -307,6 +307,96 @@ Contiene los detalles externos al dominio.
 - `RedTileSource`: interfaz para obtener las líneas de entrada.
 - `FileRedTileSource`: implementación que lee las baldosas desde un fichero.
 
+## Clases principales
+
+### `Main` - `dia9/src/main/java/Main.java`
+
+1. Calcula la ruta del fichero de entrada del día 9.
+2. Crea `FileRedTileSource` y `MovieTheaterSolver`.
+3. Ejecuta la parte 1 y la parte 2, mostrando sus resultados por consola.
+
+### `MovieTheaterSolver` - `dia9/src/main/java/application/MovieTheaterSolver.java`
+
+1. Pide las líneas del input a `RedTileSource`.
+2. Convierte esas líneas en una lista de `RedTile` mediante `RedTileParser`.
+3. Delega cada parte en su calculadora correspondiente.
+
+### `RedTileParser` - `dia9/src/main/java/application/RedTileParser.java`
+
+1. Recorre las líneas con coordenadas de baldosas rojas.
+2. Separa los valores `x` e `y` de cada coordenada.
+3. Crea objetos `RedTile` ya validados para el dominio.
+
+### `ClosedInterval` - `dia9/src/main/java/domain/common/ClosedInterval.java`
+
+1. Representa un intervalo cerrado con inicio y fin.
+2. Comprueba si contiene otro intervalo.
+3. Detecta y fusiona intervalos que se solapan o se tocan.
+
+### `RedGreenTileArea` - `dia9/src/main/java/domain/common/RedGreenTileArea.java`
+
+1. Recibe las baldosas rojas que delimitan el área.
+2. Construye coberturas horizontales por filas.
+3. Comprueba si un rectángulo completo queda dentro de la zona válida.
+
+### `RedTile` - `dia9/src/main/java/domain/common/RedTile.java`
+
+1. Representa una baldosa mediante sus coordenadas.
+2. Calcula el área del rectángulo formado con otra baldosa.
+3. Actúa como esquina candidata para formar rectángulos.
+
+### `RowCoverage` - `dia9/src/main/java/domain/common/RowCoverage.java`
+
+1. Agrupa los intervalos horizontales cubiertos en un rango de filas.
+2. Fusiona intervalos compatibles para simplificar la cobertura.
+3. Comprueba si una fila cubre completamente un intervalo de columnas.
+
+### `LargestRectangleAreaCalculatorPart1` - `dia9/src/main/java/domain/part1/LargestRectangleAreaCalculatorPart1.java`
+
+1. Prueba combinaciones de dos baldosas rojas.
+2. Calcula el área del rectángulo que formarían como esquinas opuestas.
+3. Devuelve el mayor área encontrada.
+
+### `LargestContainedRectangleAreaCalculatorPart2` - `dia9/src/main/java/domain/part2/LargestContainedRectangleAreaCalculatorPart2.java`
+
+1. Construye un `RedGreenTileArea` para saber qué posiciones son válidas.
+2. Prueba pares de baldosas como en la parte 1.
+3. Solo acepta rectángulos que estén completamente contenidos en el área.
+
+### `RedTileSource` - `dia9/src/main/java/infrastructure/RedTileSource.java`
+
+1. Define la operación para obtener líneas de coordenadas.
+2. Permite que la aplicación dependa de una abstracción y no de un fichero concreto.
+
+### `FileRedTileSource` - `dia9/src/main/java/infrastructure/FileRedTileSource.java`
+
+1. Guarda la ruta del fichero de entrada.
+2. Lee todas sus líneas.
+3. Implementa `RedTileSource` para alimentar al solver desde disco.
+
+## Flujo del programa
+
+1. `Main` crea `FileRedTileSource`.
+2. `MovieTheaterSolver` lee coordenadas y las transforma en `RedTile` mediante `RedTileParser`.
+3. La parte 1 prueba pares de baldosas rojas como esquinas opuestas de un rectángulo.
+4. La parte 2 construye `RedGreenTileArea` para saber qué zonas están cubiertas.
+5. En la parte 2 solo se acepta un rectángulo si `containsRectangle` confirma que está completamente dentro del área válida.
+
+```java
+var redTiles = parser.parse(source.getLines());
+return new LargestContainedRectangleAreaCalculatorPart2().calculate(redTiles);
+```
+
+Ambas partes comparten la búsqueda por pares, pero la segunda añade la comprobación de contención:
+
+```java
+long rectangleArea = firstCorner.rectangleAreaWith(secondCorner);
+
+if (rectangleArea > largestArea && area.containsRectangle(firstCorner, secondCorner)) {
+    largestArea = rectangleArea;
+}
+```
+
 ## Fundamentos de diseño aplicados
 
 ### Alta Cohesión

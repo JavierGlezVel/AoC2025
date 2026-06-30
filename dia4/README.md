@@ -226,6 +226,173 @@ Contiene los detalles externos al dominio.
 - `DiagramSource`: interfaz para obtener las líneas de entrada.
 - `FileDiagramSource`: implementación que lee el mapa desde un fichero.
 
+## Clases principales
+
+### `Main` - `dia4/src/main/java/Main.java`
+
+1. Decide de dónde leer el input. Si se pasa una ruta por argumentos, usa esa ruta; si no, busca el `input.txt` del módulo.
+2. Crea una fuente de datos concreta (`FileDiagramSource`) y la entrega al solver como abstracción (`DiagramSource`).
+3. Ejecuta `solvePart1()` y `solvePart2()` para imprimir las respuestas finales.
+
+```java
+DiagramSource source = new FileDiagramSource(inputPath);
+PrintingDepartmentSolver solver = new PrintingDepartmentSolver(source);
+
+System.out.println("Parte 1: " + solver.solvePart1());
+System.out.println("Parte 2: " + solver.solvePart2());
+```
+
+### `PrintingDepartmentSolver` - `dia4/src/main/java/application/PrintingDepartmentSolver.java`
+
+1. Recibe un `DiagramSource`, por lo que no necesita saber si el input viene de un fichero, de memoria o de otra fuente.
+2. Lee las líneas del diagrama y las convierte en un `PaperRollMap` usando `PaperRollMapParser`.
+3. En la parte 1 delega en `AccessiblePaperRollCounterPart1`; en la parte 2 delega en `RemovablePaperRollCounterPart2`.
+4. Mantiene separado el flujo de aplicación de la lógica de dominio.
+
+```java
+public int solvePart1() throws IOException {
+    var map = parser.parse(source.getLines());
+    return new AccessiblePaperRollCounterPart1().count(map);
+}
+```
+
+### `PaperRollMapParser` - `dia4/src/main/java/application/PaperRollMapParser.java`
+
+1. Recibe las líneas crudas del fichero.
+2. Aplica `trim()` para eliminar espacios laterales y descarta líneas vacías.
+3. Guarda solo las filas reales del mapa.
+4. Construye un `PaperRollMap`, dejando que el dominio valide si el mapa es rectangular y si contiene caracteres válidos.
+
+```java
+for (String line : lines) {
+    String row = line.trim();
+    if (!row.isEmpty()) {
+        rows.add(row);
+    }
+}
+
+return new PaperRollMap(rows);
+```
+
+### `GridPosition` - `dia4/src/main/java/domain/common/GridPosition.java`
+
+1. Representa una coordenada concreta de la cuadrícula mediante fila y columna.
+2. Da nombre de dominio a esos dos enteros, evitando llamadas poco expresivas como `count(row, column)`.
+3. Se usa para consultar si hay rollo en una posición, para generar vecinos y para actualizar el proceso de retirada.
+
+```java
+GridPosition position = new GridPosition(row, column);
+if (map.isPaperRollAt(position)) {
+    // La posición contiene un rollo de papel.
+}
+```
+
+### `PaperRollMap` - `dia4/src/main/java/domain/common/PaperRollMap.java`
+
+1. Representa el mapa completo como una lista de filas inmutables.
+2. Valida que haya al menos una fila, que todas tengan la misma anchura y que solo aparezcan `.` y `@`.
+3. Expone operaciones propias del problema: altura, anchura, comprobación de límites, rollo en una posición y número de rollos vecinos.
+4. Centraliza la lógica de vecindad para que las calculadoras no repitan cómo recorrer las ocho posiciones alrededor de una celda.
+
+```java
+public int countAdjacentPaperRolls(GridPosition position) {
+    int adjacentPaperRolls = 0;
+
+    for (GridPosition adjacent : adjacentPositions(position)) {
+        if (isPaperRollAt(adjacent)) {
+            adjacentPaperRolls++;
+        }
+    }
+
+    return adjacentPaperRolls;
+}
+```
+
+### `AccessiblePaperRollCounterPart1` - `dia4/src/main/java/domain/part1/AccessiblePaperRollCounterPart1.java`
+
+1. Recorre todas las coordenadas del mapa usando dos bucles: uno para filas y otro para columnas.
+2. Para cada celda crea un `GridPosition` y comprueba si realmente contiene un rollo (`@`).
+3. Pide a `PaperRollMap` cuántos rollos adyacentes tiene esa posición.
+4. Suma solo los rollos con tres o menos vecinos, que son los accesibles según la parte 1.
+
+```java
+private boolean isAccessiblePaperRoll(PaperRollMap map, GridPosition position) {
+    return map.isPaperRollAt(position)
+            && map.countAdjacentPaperRolls(position) <= MAXIMUM_ADJACENT_ROLLS_TO_ACCESS;
+}
+```
+
+### `RemovablePaperRollCounterPart2` - `dia4/src/main/java/domain/part2/RemovablePaperRollCounterPart2.java`
+
+1. Copia el mapa inicial a una matriz `boolean[][]` para saber qué rollos siguen presentes.
+2. Calcula una matriz `int[][]` con el número inicial de vecinos de cada rollo.
+3. Mete en una cola todos los rollos que ya son accesibles al comienzo.
+4. Mientras la cola no esté vacía, retira un rollo, reduce el contador de vecinos de los rollos adyacentes y encola los que pasan a tener tres o menos vecinos.
+5. Devuelve cuántos rollos se han podido retirar en total.
+
+```java
+while (!accessiblePaperRolls.isEmpty()) {
+    GridPosition position = accessiblePaperRolls.remove();
+    if (!remainingPaperRolls[position.row()][position.column()]) {
+        continue;
+    }
+
+    remainingPaperRolls[position.row()][position.column()] = false;
+    removedPaperRolls++;
+    updateAdjacentPaperRolls(map, position, remainingPaperRolls, adjacentPaperRolls,
+            queuedPaperRolls, accessiblePaperRolls);
+}
+```
+
+### `DiagramSource` - `dia4/src/main/java/infrastructure/DiagramSource.java`
+
+1. Define la operación mínima que necesita la aplicación: obtener una lista de líneas.
+2. Actúa como frontera entre aplicación e infraestructura.
+3. Permite que `PrintingDepartmentSolver` dependa de una interfaz en lugar de depender directamente de `Files.readAllLines`.
+
+```java
+public interface DiagramSource {
+    List<String> getLines() throws IOException;
+}
+```
+
+### `FileDiagramSource` - `dia4/src/main/java/infrastructure/FileDiagramSource.java`
+
+1. Guarda la ruta del fichero recibida desde `Main`.
+2. Convierte esa ruta en un `Path`.
+3. Lee todas las líneas del input con la API estándar de Java.
+4. Implementa `DiagramSource`, por lo que puede usarse sin que el solver conozca los detalles de lectura.
+
+```java
+@Override
+public List<String> getLines() throws IOException {
+    return Files.readAllLines(Path.of(path));
+}
+```
+
+## Flujo del programa
+
+1. `Main` crea `FileDiagramSource` con la ruta del mapa.
+2. `PrintingDepartmentSolver` pide las líneas a `DiagramSource`.
+3. `PaperRollMapParser` limpia líneas vacías y construye un `PaperRollMap`.
+4. `PaperRollMap` valida el mapa y ofrece consultas de posiciones, límites y vecinos.
+5. La parte 1 recorre todas las celdas y cuenta rollos con tres o menos vecinos.
+6. La parte 2 usa una cola para retirar rollos accesibles y actualizar los vecinos que se vuelven accesibles después.
+
+```java
+var map = parser.parse(source.getLines());
+return new RemovablePaperRollCounterPart2().count(map);
+```
+
+El recorrido de la parte 2 funciona como una propagación: al retirar un rollo, sus vecinos pueden pasar a cumplir la condición.
+
+```java
+remainingPaperRolls[position.row()][position.column()] = false;
+removedPaperRolls++;
+updateAdjacentPaperRolls(map, position, remainingPaperRolls, adjacentPaperRolls,
+        queuedPaperRolls, accessiblePaperRolls);
+```
+
 ## Fundamentos de diseño aplicados
 
 ### Alta Cohesión

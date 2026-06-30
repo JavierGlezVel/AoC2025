@@ -265,6 +265,98 @@ Contiene los detalles externos al dominio.
 - `JunctionBoxSource`: interfaz para obtener las líneas de entrada.
 - `FileJunctionBoxSource`: implementación que lee las cajas desde un fichero.
 
+## Clases principales
+
+### `Main` - `dia8/src/main/java/Main.java`
+
+1. Calcula la ruta del input.
+2. Crea `FileJunctionBoxSource` y `PlaygroundSolver`.
+3. Ejecuta las dos partes.
+
+### `PlaygroundSolver` - `dia8/src/main/java/application/PlaygroundSolver.java`
+
+1. Lee las cajas de conexión.
+2. Las parsea con `JunctionBoxParser`.
+3. Ejecuta la calculadora correspondiente a cada parte.
+
+### `JunctionBoxParser` - `dia8/src/main/java/application/JunctionBoxParser.java`
+
+1. Recorre las líneas del input.
+2. Separa las tres coordenadas.
+3. Crea objetos `JunctionBox`.
+
+### `CircuitNetwork` - `dia8/src/main/java/domain/common/CircuitNetwork.java`
+
+1. Mantiene componentes conectadas mediante unión-búsqueda.
+2. Une circuitos con `connect`.
+3. Calcula tamaños de los circuitos resultantes.
+
+### `ConnectionCandidate` - `dia8/src/main/java/domain/common/ConnectionCandidate.java`
+
+1. Representa una posible conexión entre dos cajas.
+2. Guarda los índices de las cajas.
+3. Guarda la distancia al cuadrado usada para ordenar candidatos.
+
+### `ConnectionCandidateGenerator` - `dia8/src/main/java/domain/common/ConnectionCandidateGenerator.java`
+
+1. Genera todos los pares posibles de cajas.
+2. Calcula la distancia al cuadrado de cada par.
+3. Devuelve los candidatos ordenados.
+
+### `JunctionBox` - `dia8/src/main/java/domain/common/JunctionBox.java`
+
+1. Representa una caja con coordenadas `x`, `y`, `z`.
+2. Calcula la distancia al cuadrado respecto a otra caja.
+3. Sirve como nodo del problema de conexiones.
+
+### `CircuitSizeProductCalculatorPart1` - `dia8/src/main/java/domain/part1/CircuitSizeProductCalculatorPart1.java`
+
+1. Procesa un número fijo de conexiones más cercanas.
+2. Une cajas en `CircuitNetwork`.
+3. Multiplica los tamaños de los tres circuitos mayores.
+
+### `FinalConnectionXProductCalculatorPart2` - `dia8/src/main/java/domain/part2/FinalConnectionXProductCalculatorPart2.java`
+
+1. Procesa conexiones ordenadas por distancia.
+2. Se detiene cuando toda la red queda conectada.
+3. Devuelve el producto de las coordenadas `x` de la conexión final.
+
+### `JunctionBoxSource` - `dia8/src/main/java/infrastructure/JunctionBoxSource.java`
+
+1. Define cómo obtener las líneas de cajas.
+2. Separa la entrada de la lógica de conexión.
+
+### `FileJunctionBoxSource` - `dia8/src/main/java/infrastructure/FileJunctionBoxSource.java`
+
+1. Guarda la ruta del input.
+2. Lee todas las líneas del fichero.
+3. Implementa `JunctionBoxSource`.
+
+## Flujo del programa
+
+1. `Main` crea `FileJunctionBoxSource`.
+2. `PlaygroundSolver` lee las cajas y las convierte en `JunctionBox`.
+3. `ConnectionCandidateGenerator` genera todos los pares posibles y los ordena por distancia.
+4. `CircuitNetwork` mantiene los grupos conectados mediante una estructura de unión-búsqueda.
+5. La parte 1 procesa las primeras 1000 conexiones y multiplica los tres tamaños de circuito mayores.
+6. La parte 2 sigue conectando hasta que todo queda en un único circuito y devuelve el producto de las coordenadas `x` de la última conexión útil.
+
+```java
+List<ConnectionCandidate> candidates = new ConnectionCandidateGenerator().generateSorted(junctionBoxes);
+CircuitNetwork network = new CircuitNetwork(junctionBoxes.size());
+```
+
+La conexión devuelve `true` solo cuando une circuitos distintos, lo que permite detectar la última unión relevante.
+
+```java
+boolean connectedDifferentCircuits = network.connect(candidate.firstIndex(), candidate.secondIndex());
+if (connectedDifferentCircuits && network.isSingleCircuit()) {
+    JunctionBox first = junctionBoxes.get(candidate.firstIndex());
+    JunctionBox second = junctionBoxes.get(candidate.secondIndex());
+    return first.x() * second.x();
+}
+```
+
 ## Fundamentos de diseño aplicados
 
 ### Alta Cohesión

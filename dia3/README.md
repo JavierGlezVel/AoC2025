@@ -275,6 +275,100 @@ Contiene los detalles externos al dominio.
 - `BatteryBankSource`: interfaz para obtener las líneas de entrada.
 - `FileBatteryBankSource`: implementación que lee los bancos desde un fichero.
 
+## Clases principales
+
+### `Main` - `dia3/src/main/java/Main.java`
+
+1. Determina la ruta del input.
+2. Crea `FileBatteryBankSource` y `LobbySolver`.
+3. Imprime las respuestas de ambas partes.
+
+### `LobbySolver` - `dia3/src/main/java/application/LobbySolver.java`
+
+1. Lee las líneas de bancos de baterías.
+2. Usa `BatteryBankParser` para construir el modelo.
+3. Ejecuta `TotalOutputJoltageCalculatorPart1` o `TotalOutputJoltageCalculatorPart2`.
+
+### `BatteryBankParser` - `dia3/src/main/java/application/BatteryBankParser.java`
+
+1. Recorre las líneas del input.
+2. Limpia cada línea.
+3. Construye un `BatteryBank` por línea.
+
+### `BatteryBank` - `dia3/src/main/java/domain/common/BatteryBank.java`
+
+1. Representa la secuencia de valores de un banco.
+2. Valida que haya suficientes baterías.
+3. Garantiza que los valores sean dígitos válidos.
+
+### `JoltageCalculator` - `dia3/src/main/java/domain/common/JoltageCalculator.java`
+
+1. Define el contrato para calcular el joltage de un banco.
+2. Permite intercambiar la estrategia de cálculo usada por el totalizador.
+
+### `MaximumJoltageCalculator` - `dia3/src/main/java/domain/common/MaximumJoltageCalculator.java`
+
+1. Recibe cuántas baterías deben seleccionarse.
+2. Elige vorazmente los dígitos que forman el mayor número posible.
+3. Devuelve el joltage máximo de un banco.
+
+### `TotalOutputJoltageCalculator` - `dia3/src/main/java/domain/common/TotalOutputJoltageCalculator.java`
+
+1. Recibe un `JoltageCalculator`.
+2. Aplica esa estrategia a cada banco.
+3. Suma todos los joltages obtenidos.
+
+### `TotalOutputJoltageCalculatorPart1` - `dia3/src/main/java/domain/part1/TotalOutputJoltageCalculatorPart1.java`
+
+1. Configura el cálculo con 2 baterías.
+2. Delega la suma en `TotalOutputJoltageCalculator`.
+
+### `TotalOutputJoltageCalculatorPart2` - `dia3/src/main/java/domain/part2/TotalOutputJoltageCalculatorPart2.java`
+
+1. Configura el cálculo con 12 baterías.
+2. Reutiliza el mismo totalizador común.
+
+### `BatteryBankSource` - `dia3/src/main/java/infrastructure/BatteryBankSource.java`
+
+1. Define cómo obtener las líneas de entrada.
+2. Evita que el solver dependa de una fuente concreta.
+
+### `FileBatteryBankSource` - `dia3/src/main/java/infrastructure/FileBatteryBankSource.java`
+
+1. Guarda la ruta del input.
+2. Lee las líneas del fichero.
+3. Implementa `BatteryBankSource`.
+
+## Flujo del programa
+
+1. `Main` prepara `FileBatteryBankSource`.
+2. `LobbySolver` lee las líneas y llama a `BatteryBankParser`.
+3. Cada línea se convierte en un `BatteryBank` con la cadena de valores de batería.
+4. La parte 1 usa `MaximumJoltageCalculator(2)` para formar el mayor voltaje con dos dígitos.
+5. La parte 2 usa `MaximumJoltageCalculator(12)` para aplicar la misma estrategia con doce dígitos.
+6. `TotalOutputJoltageCalculator` suma el resultado de todos los bancos.
+
+```java
+public TotalOutputJoltageCalculatorPart2() {
+    this(new MaximumJoltageCalculator(12));
+}
+```
+
+La elección de dígitos se hace manteniendo el orden original y buscando el mejor candidato posible en cada paso:
+
+```java
+for (int selected = 0; selected < batteriesToTurnOn; selected++) {
+    int searchEnd = ratings.length() - (batteriesToTurnOn - selected);
+    int bestIndex = searchStart;
+
+    for (int currentIndex = searchStart; currentIndex <= searchEnd; currentIndex++) {
+        if (ratings.charAt(currentIndex) > ratings.charAt(bestIndex)) {
+            bestIndex = currentIndex;
+        }
+    }
+}
+```
+
 ## Fundamentos de diseño aplicados
 
 ### Alta Cohesión

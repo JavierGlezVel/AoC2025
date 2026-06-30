@@ -277,6 +277,104 @@ Contiene los detalles externos al dominio.
 - `TreeFarmSource`: interfaz para obtener las líneas de entrada.
 - `FileTreeFarmSource`: implementación que lee el plan desde un fichero.
 
+## Clases principales
+
+### `Main` - `dia12/src/main/java/Main.java`
+
+1. Calcula la ruta del fichero de entrada.
+2. Crea `FileTreeFarmSource` y `TreeFarmSolver`.
+3. Ejecuta la solución y muestra el resultado.
+
+### `TreeFarmSolver` - `dia12/src/main/java/application/TreeFarmSolver.java`
+
+1. Lee las líneas del input mediante `TreeFarmSource`.
+2. Convierte el texto en `TreeFarmPlan` con `TreeFarmParser`.
+3. Delega el conteo de regiones en `FittingRegionCounterPart1`.
+
+### `TreeFarmParser` - `dia12/src/main/java/application/TreeFarmParser.java`
+
+1. Separa la definición de piezas y la lista de regiones.
+2. Convierte cada pieza en una `PresentShape`.
+3. Construye un `TreeFarmPlan` con formas y regiones validadas.
+
+### `Cell` - `dia12/src/main/java/domain/common/Cell.java`
+
+1. Representa una celda de una pieza mediante coordenadas.
+2. Permite desplazar coordenadas para normalizar formas.
+3. Se usa para generar variantes de cada regalo.
+
+### `PresentShape` - `dia12/src/main/java/domain/common/PresentShape.java`
+
+1. Representa la forma de un regalo.
+2. Calcula sus variantes válidas de orientación.
+3. Expone el área ocupada por la pieza.
+
+### `TreeFarmPlan` - `dia12/src/main/java/domain/common/TreeFarmPlan.java`
+
+1. Agrupa las formas disponibles y las regiones del huerto.
+2. Valida que existan formas y regiones.
+3. Copia las listas para que el plan no pueda modificarse desde fuera.
+
+### `TreeRegion` - `dia12/src/main/java/domain/common/TreeRegion.java`
+
+1. Representa una región rectangular del huerto.
+2. Guarda cuántas piezas de cada tipo deben caber.
+3. Calcula el área disponible.
+
+### `FittingRegionCounterPart1` - `dia12/src/main/java/domain/part1/FittingRegionCounterPart1.java`
+
+1. Recorre todas las regiones del plan.
+2. Descarta regiones cuya área no puede contener las piezas necesarias.
+3. Para regiones pequeñas, usa búsqueda exacta con máscaras de bits.
+
+### `PiecePlacements` - `dia12/src/main/java/domain/part1/FittingRegionCounterPart1.java`
+
+1. Guarda una pieza concreta que se debe colocar.
+2. Conserva todas sus colocaciones posibles dentro de una región.
+3. Ordena la búsqueda empezando por las piezas con menos alternativas.
+
+### `SearchState` - `dia12/src/main/java/domain/part1/FittingRegionCounterPart1.java`
+
+1. Representa el índice de pieza que se está intentando colocar.
+2. Guarda la máscara de celdas ya ocupadas.
+3. Permite memorizar estados fallidos durante la búsqueda.
+
+### `TreeFarmSource` - `dia12/src/main/java/infrastructure/TreeFarmSource.java`
+
+1. Define cómo obtener las líneas del input.
+2. Desacopla la aplicación del origen concreto de datos.
+
+### `FileTreeFarmSource` - `dia12/src/main/java/infrastructure/FileTreeFarmSource.java`
+
+1. Guarda la ruta del fichero de entrada.
+2. Lee sus líneas desde disco.
+3. Implementa `TreeFarmSource` para alimentar al solver.
+
+## Flujo del programa
+
+1. `Main` crea `FileTreeFarmSource`.
+2. `TreeFarmSolver` lee el input y lo transforma en `TreeFarmPlan` con `TreeFarmParser`.
+3. El parser separa las formas de regalo y las regiones del huerto.
+4. `PresentShape` calcula variantes de cada pieza para poder probar orientaciones distintas.
+5. `FittingRegionCounterPart1` recorre las regiones y descarta primero las que no tienen área suficiente.
+6. Si la región es pequeña, genera colocaciones posibles como máscaras de bits y usa búsqueda con memoria para comprobar si las piezas caben sin solaparse.
+
+```java
+var plan = parser.parse(source.getLines());
+return new FittingRegionCounterPart1().countFittingRegions(plan);
+```
+
+La búsqueda exacta prueba colocaciones sin pisar celdas ya ocupadas:
+
+```java
+for (long placement : pieces.get(pieceIndex).placements()) {
+    if ((occupiedCells & placement) == 0
+            && search(pieces, pieceIndex + 1, occupiedCells | placement, memoizedFailures)) {
+        return true;
+    }
+}
+```
+
 ## Fundamentos de diseño aplicados
 
 ### Alta Cohesión

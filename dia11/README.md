@@ -249,6 +249,84 @@ Contiene los detalles externos al dominio.
 - `DeviceNetworkSource`: interfaz para obtener las líneas de entrada.
 - `FileDeviceNetworkSource`: implementación que lee la red desde un fichero.
 
+## Clases principales
+
+### `Main` - `dia11/src/main/java/Main.java`
+
+1. Calcula la ruta del input del día 11.
+2. Crea `FileDeviceNetworkSource` y `ReactorSolver`.
+3. Ejecuta las dos partes y escribe los resultados por consola.
+
+### `ReactorSolver` - `dia11/src/main/java/application/ReactorSolver.java`
+
+1. Lee las líneas mediante `DeviceNetworkSource`.
+2. Convierte el texto en `DeviceNetwork` con `DeviceNetworkParser`.
+3. Delega el conteo de caminos en la clase de dominio de cada parte.
+
+### `DeviceNetworkParser` - `dia11/src/main/java/application/DeviceNetworkParser.java`
+
+1. Recorre las conexiones descritas en el input.
+2. Separa cada dispositivo de sus salidas.
+3. Construye el mapa de adyacencias usado por `DeviceNetwork`.
+
+### `DeviceNetwork` - `dia11/src/main/java/domain/common/DeviceNetwork.java`
+
+1. Representa la red dirigida de dispositivos.
+2. Devuelve las salidas disponibles desde un dispositivo.
+3. Centraliza el nombre del dispositivo final de salida.
+
+### `ReactorPathCounterPart1` - `dia11/src/main/java/domain/part1/ReactorPathCounterPart1.java`
+
+1. Empieza el recorrido desde el dispositivo inicial.
+2. Explora recursivamente todas las salidas.
+3. Usa memoria de resultados para no recalcular caminos repetidos.
+
+### `ReactorRequiredDevicePathCounterPart2` - `dia11/src/main/java/domain/part2/ReactorRequiredDevicePathCounterPart2.java`
+
+1. Recorre la red manteniendo si ya se han visitado los dispositivos obligatorios.
+2. Cuenta solo los caminos que llegan a salida después de pasar por ambos.
+3. Memoriza estados para evitar repetir subproblemas.
+
+### `PathState` - `dia11/src/main/java/domain/part2/ReactorRequiredDevicePathCounterPart2.java`
+
+1. Guarda el dispositivo actual.
+2. Indica si ya se visitaron `dac` y `fft`.
+3. Genera el siguiente estado al avanzar por la red.
+
+### `DeviceNetworkSource` - `dia11/src/main/java/infrastructure/DeviceNetworkSource.java`
+
+1. Define la lectura de líneas de la red.
+2. Permite sustituir el origen de datos sin cambiar el solver.
+
+### `FileDeviceNetworkSource` - `dia11/src/main/java/infrastructure/FileDeviceNetworkSource.java`
+
+1. Guarda la ruta del fichero de entrada.
+2. Lee todas sus líneas.
+3. Implementa `DeviceNetworkSource` usando el sistema de archivos.
+
+## Flujo del programa
+
+1. `Main` crea `FileDeviceNetworkSource`.
+2. `ReactorSolver` lee las líneas y `DeviceNetworkParser` construye la red dirigida.
+3. `DeviceNetwork` permite consultar las salidas de cada dispositivo.
+4. La parte 1 cuenta todos los caminos desde `svr` hasta `out`.
+5. La parte 2 cuenta solo los caminos que llegan a `out` después de haber pasado por `dac` y `fft`.
+6. Ambas partes usan recursión con memoria para no recalcular los caminos desde un mismo estado.
+
+```java
+var network = parser.parse(source.getLines());
+return new ReactorRequiredDevicePathCounterPart2().countPaths(network);
+```
+
+La parte 2 guarda en el estado tanto el dispositivo actual como si se han visitado los obligatorios:
+
+```java
+PathState updatedState = state.withVisitedDevice();
+if (DeviceNetwork.OUTPUT_DEVICE.equals(updatedState.device())) {
+    return updatedState.hasVisitedBothRequiredDevices() ? BigInteger.ONE : BigInteger.ZERO;
+}
+```
+
 ## Fundamentos de diseño aplicados
 
 ### Alta Cohesión

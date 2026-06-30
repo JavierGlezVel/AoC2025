@@ -273,6 +273,85 @@ Contiene los detalles externos al dominio.
 - `DatabaseSource`: interfaz para obtener las líneas de entrada.
 - `FileDatabaseSource`: implementación que lee la base de datos desde un fichero.
 
+## Clases principales
+
+### `Main` - `dia5/src/main/java/Main.java`
+
+1. Localiza el input del día.
+2. Crea `FileDatabaseSource` y `CafeteriaSolver`.
+3. Ejecuta las dos partes y muestra sus resultados.
+
+### `CafeteriaSolver` - `dia5/src/main/java/application/CafeteriaSolver.java`
+
+1. Lee la base de datos mediante `DatabaseSource`.
+2. La convierte en `InventoryDatabase` con `InventoryDatabaseParser`.
+3. Delega la parte 1 y la parte 2 en sus contadores.
+
+### `InventoryDatabaseParser` - `dia5/src/main/java/application/InventoryDatabaseParser.java`
+
+1. Separa los rangos frescos de los IDs disponibles.
+2. Convierte cada rango textual en `FreshIngredientIdRange`.
+3. Construye un `InventoryDatabase`.
+
+### `FreshIngredientIdRange` - `dia5/src/main/java/domain/common/FreshIngredientIdRange.java`
+
+1. Representa un intervalo cerrado de IDs.
+2. Comprueba pertenencia con `contains`.
+3. Permite fusionar rangos que se solapan o se tocan.
+
+### `InventoryDatabase` - `dia5/src/main/java/domain/common/InventoryDatabase.java`
+
+1. Agrupa los rangos frescos y los IDs disponibles.
+2. Copia las listas para evitar modificaciones externas.
+3. Sirve como entrada común para ambas partes.
+
+### `FreshIngredientCounterPart1` - `dia5/src/main/java/domain/part1/FreshIngredientCounterPart1.java`
+
+1. Recorre los IDs disponibles.
+2. Comprueba si cada ID cae dentro de algún rango fresco.
+3. Cuenta cuántos IDs disponibles son frescos.
+
+### `FreshIngredientIdCoverageCounterPart2` - `dia5/src/main/java/domain/part2/FreshIngredientIdCoverageCounterPart2.java`
+
+1. Ordena los rangos frescos.
+2. Fusiona rangos solapados o contiguos.
+3. Suma la cobertura total sin contar duplicados.
+
+### `DatabaseSource` - `dia5/src/main/java/infrastructure/DatabaseSource.java`
+
+1. Define cómo obtener las líneas de la base de datos.
+2. Desacopla el solver del mecanismo concreto de lectura.
+
+### `FileDatabaseSource` - `dia5/src/main/java/infrastructure/FileDatabaseSource.java`
+
+1. Guarda la ruta del fichero.
+2. Lee todas sus líneas.
+3. Implementa la interfaz `DatabaseSource`.
+
+## Flujo del programa
+
+1. `Main` crea `FileDatabaseSource`.
+2. `CafeteriaSolver` lee las líneas del input y usa `InventoryDatabaseParser`.
+3. El parser construye un `InventoryDatabase` con rangos de IDs frescos y los IDs disponibles.
+4. La parte 1 recorre los IDs disponibles y cuenta cuántos pertenecen a algún rango fresco.
+5. La parte 2 ordena los rangos frescos, fusiona los que se solapan o se tocan y suma su cobertura total.
+
+```java
+var database = parser.parse(source.getLines());
+return new FreshIngredientIdCoverageCounterPart2().count(database);
+```
+
+La parte 2 evita contar dos veces IDs cubiertos por rangos solapados:
+
+```java
+if (currentRange.overlapsOrTouches(range)) {
+    currentRange = currentRange.merge(range);
+} else {
+    freshIngredientIds += currentRange.size();
+    currentRange = range;
+}
+```
+
 ## Fundamentos de diseño aplicados
 
 ### Alta Cohesión

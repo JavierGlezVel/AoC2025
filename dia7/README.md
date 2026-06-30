@@ -267,6 +267,85 @@ Contiene los detalles externos al dominio.
 - `DiagramSource`: interfaz para obtener las líneas de entrada.
 - `FileDiagramSource`: implementación que lee el diagrama desde un fichero.
 
+## Clases principales
+
+### `Main` - `dia7/src/main/java/Main.java`
+
+1. Calcula la ruta del input.
+2. Crea `FileDiagramSource` y `LaboratorySolver`.
+3. Muestra el resultado de ambas partes.
+
+### `LaboratorySolver` - `dia7/src/main/java/application/LaboratorySolver.java`
+
+1. Lee el diagrama del colector.
+2. Lo convierte en `TachyonManifold`.
+3. Delega la simulación en el contador de cada parte.
+
+### `TachyonManifoldParser` - `dia7/src/main/java/application/TachyonManifoldParser.java`
+
+1. Recibe las líneas del diagrama.
+2. Construye un `TachyonManifold`.
+3. Deja la validación del mapa en el propio dominio.
+
+### `GridPosition` - `dia7/src/main/java/domain/common/GridPosition.java`
+
+1. Representa una posición del colector.
+2. Guarda fila y columna.
+3. Evita trabajar con coordenadas sueltas.
+
+### `TachyonManifold` - `dia7/src/main/java/domain/common/TachyonManifold.java`
+
+1. Representa el diagrama del colector.
+2. Valida caracteres, dimensiones y punto de inicio.
+3. Ofrece consultas como `start`, `isSplitterAt` y `containsColumn`.
+
+### `BeamSplitCounterPart1` - `dia7/src/main/java/domain/part1/BeamSplitCounterPart1.java`
+
+1. Simula columnas activas de haces.
+2. Cuenta cada divisor encontrado.
+3. Propaga los haces hacia izquierda y derecha.
+
+### `TimelineCounterPart2` - `dia7/src/main/java/domain/part2/TimelineCounterPart2.java`
+
+1. Simula líneas temporales con cantidad por columna.
+2. Suma líneas que salen del mapa.
+3. Devuelve el total con `BigInteger`.
+
+### `DiagramSource` - `dia7/src/main/java/infrastructure/DiagramSource.java`
+
+1. Define la lectura de líneas del diagrama.
+2. Permite cambiar la fuente sin tocar la simulación.
+
+### `FileDiagramSource` - `dia7/src/main/java/infrastructure/FileDiagramSource.java`
+
+1. Guarda la ruta del input.
+2. Lee las líneas del fichero.
+3. Implementa `DiagramSource`.
+
+## Flujo del programa
+
+1. `Main` crea `FileDiagramSource` para leer el diagrama del laboratorio.
+2. `LaboratorySolver` parsea el diagrama con `TachyonManifoldParser`.
+3. `TachyonManifold` guarda la posición inicial y permite consultar si una celda divide el rayo.
+4. La parte 1 mantiene el conjunto de columnas activas y cuenta cuántas divisiones se producen.
+5. La parte 2 mantiene un mapa columna-cantidad de líneas temporales para contar todas las posibilidades sin simularlas una a una.
+
+```java
+var manifold = parser.parse(source.getLines());
+return new TimelineCounterPart2().count(manifold);
+```
+
+Cuando una línea temporal llega a un divisor, se reparte hacia izquierda y derecha; si sale del mapa, se cuenta como completada.
+
+```java
+if (manifold.isSplitterAt(position)) {
+    completedTimelines = split(manifold, nextActiveTimelines, completedTimelines, column - 1, timelines);
+    completedTimelines = split(manifold, nextActiveTimelines, completedTimelines, column + 1, timelines);
+} else {
+    addTimelines(nextActiveTimelines, column, timelines);
+}
+```
+
 ## Fundamentos de diseño aplicados
 
 ### Alta Cohesión

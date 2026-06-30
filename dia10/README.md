@@ -285,6 +285,98 @@ Contiene los detalles externos al dominio.
 - `FactoryMachineSource`: interfaz para obtener las líneas de entrada.
 - `FileFactoryMachineSource`: implementación que lee las máquinas desde un fichero.
 
+## Clases principales
+
+### `Main` - `dia10/src/main/java/Main.java`
+
+1. Calcula la ruta del input del día 10.
+2. Crea `FileFactoryMachineSource` y `FactorySolver`.
+3. Ejecuta las dos partes y muestra los resultados.
+
+### `FactorySolver` - `dia10/src/main/java/application/FactorySolver.java`
+
+1. Lee el input mediante `FactoryMachineSource`.
+2. Convierte los bloques de texto en máquinas con `FactoryMachineParser`.
+3. Llama a la calculadora de la parte 1 o de la parte 2 según corresponda.
+
+### `FactoryMachineParser` - `dia10/src/main/java/application/FactoryMachineParser.java`
+
+1. Divide el input en bloques, uno por máquina.
+2. Extrae botones, máscaras de contadores y requisitos de voltaje.
+3. Construye objetos `FactoryMachine` con la información ya validada.
+
+### `FactoryMachine` - `dia10/src/main/java/domain/common/FactoryMachine.java`
+
+1. Representa una máquina con sus botones y contadores.
+2. Guarda qué contadores afecta cada botón.
+3. Expone los datos necesarios para calcular el mínimo de pulsaciones.
+
+### `MinimumButtonPressesCalculatorPart1` - `dia10/src/main/java/domain/part1/MinimumButtonPressesCalculatorPart1.java`
+
+1. Recorre las máquinas del input.
+2. Busca combinaciones de pulsaciones que enciendan todos los contadores.
+3. Suma el mínimo de pulsaciones necesario para cada máquina.
+
+### `MinimumJoltageButtonPressesCalculatorPart2` - `dia10/src/main/java/domain/part2/MinimumJoltageButtonPressesCalculatorPart2.java`
+
+1. Traduce cada máquina a un sistema lineal de ecuaciones.
+2. Reduce la matriz para separar columnas pivote y variables libres.
+3. Enumera soluciones enteras no negativas y se queda con la de menor coste.
+
+### `LinearSystem` - `dia10/src/main/java/domain/part2/MinimumJoltageButtonPressesCalculatorPart2.java`
+
+1. Guarda la matriz reducida del sistema.
+2. Conserva las columnas pivote y las columnas libres.
+3. Permite evaluar soluciones candidatas sin recalcular la reducción.
+
+### `Fraction` - `dia10/src/main/java/domain/part2/MinimumJoltageButtonPressesCalculatorPart2.java`
+
+1. Representa números racionales exactos durante la reducción.
+2. Normaliza signo y divisor común.
+3. Evita errores de redondeo al comprobar si una solución es entera.
+
+### `FactoryMachineSource` - `dia10/src/main/java/infrastructure/FactoryMachineSource.java`
+
+1. Define cómo obtener las líneas del input.
+2. Desacopla el solver del origen físico de los datos.
+
+### `FileFactoryMachineSource` - `dia10/src/main/java/infrastructure/FileFactoryMachineSource.java`
+
+1. Guarda la ruta del fichero de entrada.
+2. Lee sus líneas desde disco.
+3. Implementa `FactoryMachineSource` para integrarse con la capa de aplicación.
+
+## Flujo del programa
+
+1. `Main` crea `FileFactoryMachineSource`.
+2. `FactorySolver` lee el input y `FactoryMachineParser` construye una lista de `FactoryMachine`.
+3. La parte 1 prueba combinaciones de botones usando máscaras de bits y se queda con la combinación con menos pulsaciones.
+4. La parte 2 convierte cada máquina en un sistema lineal donde cada botón aporta a ciertos contadores.
+5. `MinimumJoltageButtonPressesCalculatorPart2` reduce la matriz con fracciones exactas, enumera variables libres y valida soluciones enteras no negativas.
+
+```java
+var machines = parser.parse(source.getLines());
+return new MinimumJoltageButtonPressesCalculatorPart2().calculate(machines);
+```
+
+En la parte 1, cada combinación se representa como bits activados:
+
+```java
+for (int button = 0; button < buttonCount; button++) {
+    if ((combination & (1 << button)) != 0) {
+        currentMask ^= machine.buttonMasks().get(button);
+    }
+}
+```
+
+En la parte 2, `Fraction` evita redondeos al decidir si una solución es válida:
+
+```java
+if (!value.isInteger() || value.isNegative()) {
+    return NO_SOLUTION;
+}
+```
+
 ## Fundamentos de diseño aplicados
 
 ### Alta Cohesión
